@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffss.dao.NfOptDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.rffss.entity.NfOptEntity" id="nfOptMap">
+        <result property="id" column="id"/>
+        <result property="businid" column="businid"/>
+        <result property="module" column="module"/>
+        <result property="ouser" column="ouser"/>
+        <result property="ip" column="ip"/>
+        <result property="duration" column="duration"/>
+        <result property="otime" column="otime"/>
+    </resultMap>
+
+
+</mapper>

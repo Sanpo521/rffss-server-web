@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffssw.dao.NfUserTokenDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+	<resultMap type="io.renren.modules.rffssw.entity.NfUserTokenEntity" id="nfWuserTokenMap">
+		<result property="id" column="id"/>
+		<result property="token" column="token"/>
+		<result property="expireTime" column="expire_time"/>
+		<result property="updateTime" column="update_time"/>
+	</resultMap>
+
+<!--	<select id="queryByToken" resultMap="nfWuserTokenMap">-->
+<!--		select * from nf_wuser_token where token = #{value}-->
+<!--	</select>-->
+
+	<select id="queryByToken" resultType="io.renren.modules.rffssw.entity.NfUserTokenEntity">
+		select * from nf_wuser_token where token = #{value}
+	</select>
+</mapper>
