@@ -23,7 +23,8 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
     public PageUtils queryPage(Map<String, Object> params) {
         QueryWrapper queryWrapper = new QueryWrapper<NfBusinEntity>();
         if (params.containsKey("btype")){
-            queryWrapper.eq("btype", params.get("btype").toString());
+            queryWrapper.in("btype",(List)params.get("btype"));
+//            queryWrapper.eq("btype", params.get("btype").toString());
         }
         if (params.containsKey("status")){
             queryWrapper.eq("status", params.get("status").toString());

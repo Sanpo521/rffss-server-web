@@ -24,8 +24,8 @@ public class NfOptEntity implements Serializable {
     /**
      * 序号
      */
-    @TableId(type = IdType.AUTO)
-    private Long id;
+    @TableId(type = IdType.INPUT)
+    private String id;
     /**
      * 业务id: NfBusinEntity id
      */

@@ -24,8 +24,8 @@ public class NfRffsspUserEntity  implements Serializable {
     /**
      * 序号
      */
-    @TableId(type = IdType.AUTO)
-    private Long id;
+    @TableId(type = IdType.INPUT)
+    private String id;
     /**
      * 冷藏冷冻食品贮存服务提供者id: NfRffsspEntity id
      */

@@ -144,6 +144,7 @@ public class WebNfRecordController {
             NfRffsspUserEntity rffsspUser = rffsspUserService.getByRffssidAndUserid(rffssp.getId(), userid);
             if (null == rffsspUser) {
                 rffsspUser = new NfRffsspUserEntity();
+                rffsspUser.setId(RffssConstant.ID_PREFIX_OUT+IdWorker.getIdStr());
                 rffsspUser.setUserid(userid);
                 rffsspUser.setRffsspid(rffssp.getId());
                 rffsspUser.setCreatetime(new Date());

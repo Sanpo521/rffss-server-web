@@ -187,4 +187,9 @@ public class NfRffsspEntity implements Serializable {
      */
     private String remarks;
 
+    /**
+     * 注销原因
+     */
+    private String canclecause;
+
 }

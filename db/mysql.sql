@@ -429,47 +429,48 @@ CREATE TABLE `nf_wuser`  (
 
 -- 冷藏冷冻食品贮存服务提供者
 CREATE TABLE `nf_rffssp`  (
-                              `id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '冷藏冷冻食品贮存服务提供者ID',
+                              `id` varchar(30)  NOT NULL COMMENT '冷藏冷冻食品贮存服务提供者ID',
                               `status` tinyint(0) NOT NULL COMMENT '状态 1 录入  2 提交  3 业务完成',
                               `createtime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
                               `lasttime` datetime(0) NULL DEFAULT NULL COMMENT '最后操作时间',
                               `valid` int(0) NOT NULL COMMENT '是否有效：1有效 0无效',
-                              `issueorg` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '管理机构ID',
+                              `issueorg` varchar(10)  NULL DEFAULT NULL COMMENT '管理机构ID',
                               `apply_time` datetime(0) NULL DEFAULT NULL COMMENT '办理备案日期',
-                              `apply_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请人姓名',
-                              `apply_contact_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请人联系方式',
-                              `unisc_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '统一社会信用代码',
-                              `storage_ent_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '从事冷藏冷冻食品贮存业务的非食品生产经营者名称',
-                              `le_rep` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '法定代表人（负责人）',
-                              `le_rep_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '法定代表人（负责人）身份证号码',
-                              `contract_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系人',
-                              `contract_tel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系电话',
-                              `storage_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库名称',
-                              `storage_province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（省）代码',
-                              `storage_prov_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（省）',
-                              `storage_city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（市）代码',
-                              `storage_city_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（市）',
-                              `storage_county` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（区/县）代码',
-                              `storage_county_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（区/县）',
-                              `storage_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库详细地址',
-                              `storage_power_ton` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '贮存能力（单位：吨）',
-                              `storage_power_cubic_meter` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '贮存能力（单位：立方米）',
-                              `rec_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备案编号',
+                              `apply_name` varchar(255)  NULL DEFAULT NULL COMMENT '申请人姓名',
+                              `apply_contact_info` varchar(255)  NULL DEFAULT NULL COMMENT '申请人联系方式',
+                              `unisc_id` varchar(255)  NULL DEFAULT NULL COMMENT '统一社会信用代码',
+                              `storage_ent_name` varchar(255)  NULL DEFAULT NULL COMMENT '从事冷藏冷冻食品贮存业务的非食品生产经营者名称',
+                              `le_rep` varchar(255)  NULL DEFAULT NULL COMMENT '法定代表人（负责人）',
+                              `le_rep_no` varchar(255)  NULL DEFAULT NULL COMMENT '法定代表人（负责人）身份证号码',
+                              `contract_name` varchar(255)  NULL DEFAULT NULL COMMENT '联系人',
+                              `contract_tel` varchar(255)  NULL DEFAULT NULL COMMENT '联系电话',
+                              `storage_name` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库名称',
+                              `storage_province` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（省）代码',
+                              `storage_prov_name` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（省）',
+                              `storage_city` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（市）代码',
+                              `storage_city_name` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（市）',
+                              `storage_county` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（区/县）代码',
+                              `storage_county_name` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（区/县）',
+                              `storage_address` varchar(255)  NULL DEFAULT NULL COMMENT '冷藏冷冻库详细地址',
+                              `storage_power_ton` varchar(255)  NULL DEFAULT NULL COMMENT '贮存能力（单位：吨）',
+                              `storage_power_cubic_meter` varchar(255)  NULL DEFAULT NULL COMMENT '贮存能力（单位：立方米）',
+                              `rec_num` varchar(255)  NULL DEFAULT NULL COMMENT '备案编号',
                               `rec_time` datetime(0) NULL DEFAULT NULL COMMENT '备案日期',
                               `entry_time` datetime(0) NULL DEFAULT NULL COMMENT '入库时间',
-                              `safety_standards` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）是否符合食品安全标准',
-                              `storage_area` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）贮存面积',
-                              `storage_capacity` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）贮存容积',
-                              `equipment_name_specification` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）冷藏冷冻设施、设备名称规格及数量',
-                              `humidity_control_range` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）温度、湿度控制范围',
-                              `bumber_explicit_thermometers` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）可正确显示内部温度的温度计和外显式温度计数量',
-                              `keep_clean` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）贮存设备、容器和工具是否无毒无害、保持清洁',
-                              `is_ground` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）是否分区分架分类存放食品，是否离地离墙10cm',
-                              `is_disinfect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '是否有校验消毒清洁维护制度及记录',
-                              `other_categories` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '其他非食品类贮存品类别',
-                              `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                              `safety_standards` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）是否符合食品安全标准',
+                              `storage_area` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）贮存面积',
+                              `storage_capacity` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）贮存容积',
+                              `equipment_name_specification` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）冷藏冷冻设施、设备名称规格及数量',
+                              `humidity_control_range` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）温度、湿度控制范围',
+                              `bumber_explicit_thermometers` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）可正确显示内部温度的温度计和外显式温度计数量',
+                              `keep_clean` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）贮存设备、容器和工具是否无毒无害、保持清洁',
+                              `is_ground` varchar(255)  NULL DEFAULT NULL COMMENT '（贮存能力）是否分区分架分类存放食品，是否离地离墙10cm',
+                              `is_disinfect` varchar(255)  NULL DEFAULT NULL COMMENT '是否有校验消毒清洁维护制度及记录',
+                              `other_categories` varchar(255)  NULL DEFAULT NULL COMMENT '其他非食品类贮存品类别',
+                              `remarks` varchar(255)  NULL DEFAULT NULL COMMENT '备注',
+                              `canclecause` text  NULL DEFAULT NULL COMMENT '注销原因',
                               PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '冷藏冷冻食品贮存服务提供者' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB  COMMENT = '冷藏冷冻食品贮存服务提供者' ROW_FORMAT = Dynamic;
 
 -- 业务表
 CREATE TABLE `nf_busin`  (
@@ -600,13 +601,13 @@ COMMIT;
 
 DROP TABLE IF EXISTS `code_addiv`;
 CREATE TABLE `code_addiv`  (
-                               `code` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '行政区划',
-                               `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '行政名称',
-                               `parent` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '父级行政区划',
-                               `level` varchar(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '行政级别：1为省，2为市，3为区县，4为乡镇、社区、街道',
+                               `code` varchar(10)  NOT NULL COMMENT '行政区划',
+                               `name` varchar(30)  NOT NULL COMMENT '行政名称',
+                               `parent` varchar(10)  NOT NULL COMMENT '父级行政区划',
+                               `level` varchar(1)  NULL DEFAULT NULL COMMENT '行政级别：1为省，2为市，3为区县，4为乡镇、社区、街道',
                                `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否可用 1可用，0不可用',
                                PRIMARY KEY (`code`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of code_addiv

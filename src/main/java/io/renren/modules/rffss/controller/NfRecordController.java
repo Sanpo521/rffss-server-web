@@ -43,7 +43,9 @@ public class NfRecordController {
     @RequestMapping("/apply/list")
     @RequiresPermissions("nfrecord:apply:list")
     public R applyList(@RequestParam Map<String, Object> params){
-        params.put("btype", RffssConstant.BUSIN_TYPE_APPLY_IN);
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_APPLY_IN);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ING);
         return list(params);
     }
@@ -51,7 +53,10 @@ public class NfRecordController {
     @RequestMapping("/change/list")
     @RequiresPermissions("nfrecord:change:list")
     public R changeList(@RequestParam Map<String, Object> params){
-        params.put("btype", RffssConstant.BUSIN_TYPE_CHANGE_IN);
+
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_IN);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ING);
         return list(params);
     }
@@ -59,7 +64,9 @@ public class NfRecordController {
     @RequestMapping("/cancel/list")
     @RequiresPermissions("nfrecord:cancel:list")
     public R cancelList(@RequestParam Map<String, Object> params){
-        params.put("btype", RffssConstant.BUSIN_TYPE_CANCEL_IN);
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_CANCEL_IN);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ING);
         return list(params);
     }
@@ -67,6 +74,10 @@ public class NfRecordController {
     @RequestMapping("/applya/list")
     @RequiresPermissions("nfrecord:applya:list")
     public R applyaList(@RequestParam Map<String, Object> params){
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_APPLY_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_APPLY_OUT);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_SUMBIT);
         return list(params);
     }
@@ -74,6 +85,10 @@ public class NfRecordController {
     @RequestMapping("/changea/list")
     @RequiresPermissions("nfrecord:changea:list")
     public R changeaList(@RequestParam Map<String, Object> params){
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_OUT);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_SUMBIT);
         return list(params);
     }
@@ -81,6 +96,10 @@ public class NfRecordController {
     @RequestMapping("/cancela/list")
     @RequiresPermissions("nfrecord:cancela:list")
     public R cancelaList(@RequestParam Map<String, Object> params){
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_CANCEL_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_CANCEL_OUT);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_SUMBIT);
         return list(params);
     }
@@ -88,6 +107,10 @@ public class NfRecordController {
     @RequestMapping("/applyc/list")
     @RequiresPermissions("nfrecord:applyc:list")
     public R applycList(@RequestParam Map<String, Object> params){
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_APPLY_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_APPLY_OUT);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ACCEPT);
         return list(params);
     }
@@ -95,6 +118,10 @@ public class NfRecordController {
     @RequestMapping("/changec/list")
     @RequiresPermissions("nfrecord:changec:list")
     public R changecList(@RequestParam Map<String, Object> params){
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_OUT);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ACCEPT);
         return list(params);
     }
@@ -102,6 +129,10 @@ public class NfRecordController {
     @RequestMapping("/cancelc/list")
     @RequiresPermissions("nfrecord:cancelc:list")
     public R cancelcList(@RequestParam Map<String, Object> params){
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_CANCEL_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_CANCEL_OUT);
+        params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ACCEPT);
         return list(params);
     }
@@ -418,6 +449,10 @@ public class NfRecordController {
 
         NfCheckedEntity accept = record.getAccept();
         if (null != accept && StringUtils.isNotEmpty(accept.getName())){
+//            accept.setId(accept.getId()==0L?null:accept.getId());
+            if (!StringUtils.isNotEmpty(accept.getId())){
+                accept.setId(RffssConstant.ID_PREFIX_IN+IdWorker.getIdStr());
+            }
             accept.setCtype(RffssConstant.CHECKED_TYPE_ACCEPT);
             accept.setBusinid(busin.getId());
             if (null == accept.getCreatetime()){
@@ -433,9 +468,13 @@ public class NfRecordController {
 
         NfCheckedEntity checked = record.getChecked();
         if (null != checked && StringUtils.isNotEmpty(checked.getName())){
-            accept.setCtype(RffssConstant.CHECKED_TYPE_CHECKED);
+//            checked.setId(checked.getId()==0L?null:checked.getId());
+            if (!StringUtils.isNotEmpty(checked.getId())){
+                checked.setId(RffssConstant.ID_PREFIX_IN+IdWorker.getIdStr());
+            }
+            checked.setCtype(RffssConstant.CHECKED_TYPE_CHECKED);
             checked.setBusinid(busin.getId());
-            if (null == agent.getCreatetime()){
+            if (null == checked.getCreatetime()){
                 checked.setCreatetime(new Date());
             }
             checked.setLasttime(new Date());
