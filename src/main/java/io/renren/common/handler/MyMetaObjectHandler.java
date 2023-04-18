@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+
+
 /**
  *
  *
@@ -27,8 +29,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
         log.info("insert 自动填充。。。。。。");
         //实现填充业务逻辑
-        this.strictInsertFill(metaObject, CREATE_TIME_PROPERTY, LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, UPDATE_TIME_PROPERTY, LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, CREATE_TIME_PROPERTY, Date.class, new Date());
+        this.strictInsertFill(metaObject, UPDATE_TIME_PROPERTY, Date.class, new Date());
     }
 
     @Override
@@ -37,7 +39,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.info("update 自动填充。。。。。。");
         // 这里将'updateTime'设为空，因为Mybatis-plus有设计漏洞，若属性不为空就不能重新覆盖新值。
         metaObject.setValue(UPDATE_TIME_PROPERTY, null);
-        this.strictUpdateFill(metaObject, UPDATE_TIME_PROPERTY, LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, UPDATE_TIME_PROPERTY,Date.class, new Date());
     }
 }
 
