@@ -17,5 +17,29 @@
             select b.*  from nf_busin b
             left join nf_rffssp_user u on u.rffsspid=b.rffsspid
             where u.userid=#{userId}
+            order by b.lasttime desc
+        </select>
+
+        <select id="queryPage" resultMap="nfBusinMap">
+            select b.*  from nf_busin b
+            left join nf_rffssp r on r.id=b.rffsspid
+            <trim prefix="WHERE" prefixOverrides="AND | OR" >
+                <if test="status !=null">
+                    and b.status = #{status}
+                </if>
+                <if test="btype != null and btype.size() > 0">
+                    and b.btype in
+                    <foreach collection="btype" index="idx" item="a" separator="," open="(" close=")">
+                        #{a}
+                    </foreach>
+                </if>
+                <if test="issueorg != null and issueorg.size() > 0">
+                    and r.issueorg in
+                    <foreach collection="issueorg" index="idx" item="b" separator="," open="(" close=")">
+                        #{b}
+                    </foreach>
+                </if>
+            </trim>
+          order by b.lasttime desc
         </select>
 </mapper>

@@ -8,7 +8,6 @@ import io.renren.modules.rffss.RffssConstant;
 import io.renren.modules.rffss.entity.*;
 import io.renren.modules.rffss.service.*;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -136,6 +135,28 @@ public class NfRecordController {
         params.put("status", RffssConstant.BUSIN_STATUS_ACCEPT);
         return list(params);
     }
+
+    @RequestMapping("/check/list")
+    @RequiresPermissions("nfrecord:check:list")
+    public R checkList(@RequestParam Map<String, Object> params){
+        if (params.containsKey("btype")){
+            String[] b=params.get("btype").toString().split(",");
+            if(b!=null && b.length>0){
+                List<String> btypes =  Arrays.asList(b);
+                params.put("btype", btypes);
+            }
+        }else {
+            List<String> btypes = new ArrayList<>();
+            btypes.add(RffssConstant.BUSIN_TYPE_APPLY_IN);
+            btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_IN);
+            btypes.add(RffssConstant.BUSIN_TYPE_APPLY_OUT);
+            btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_OUT);
+            params.put("btype", btypes);
+        }
+        params.put("status", RffssConstant.BUSIN_STATUS_CHECK);
+        return list(params);
+    }
+
 
     private R list( Map<String, Object> params){
         PageUtils businPage = businService.queryPage(params);

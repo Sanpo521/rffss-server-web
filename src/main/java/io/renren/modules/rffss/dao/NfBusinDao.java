@@ -6,6 +6,8 @@ import io.renren.modules.rffss.entity.NfBusinEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 业务表
  * 
@@ -16,4 +18,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface NfBusinDao extends BaseMapper<NfBusinEntity> {
     Page<NfBusinEntity> queryPageIsUserId(Page<NfBusinEntity> pageParam ,@Param("userId")Long userId);
+
+
+    Page<NfBusinEntity> queryPage(Page<NfBusinEntity> pageParam ,@Param("btype")List<String> btype,@Param("issueorg")List<String> issueorg,@Param("status")String status);
 }
