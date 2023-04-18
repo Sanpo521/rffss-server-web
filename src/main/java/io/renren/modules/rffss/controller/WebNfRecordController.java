@@ -13,7 +13,10 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhaoxiubin
@@ -46,7 +49,8 @@ public class WebNfRecordController {
     @RequestMapping("/list")
 //    @RequiresPermissions("nfrecord:nfjlqjxspzzs:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils businPage = businService.queryPage(params);
+        Long userid = ((NfUserEntity) SecurityUtils.getSubject().getPrincipal()).getId();
+        PageUtils businPage = businService.queryPageIsUserId(params,userid);
         List<NfBusinEntity> businList = (List<NfBusinEntity>) businPage.getList();
         List<NfRecordEntity> recordList = new ArrayList<NfRecordEntity>(5);
         for (NfBusinEntity busin: businList){

@@ -13,5 +13,9 @@
         <result property="lasttime" column="lasttime"/>
     </resultMap>
 
-
+        <select id="queryPageIsUserId" resultMap="nfBusinMap">
+            select b.*  from nf_busin b
+            left join nf_rffssp_user u on u.rffsspid=b.rffsspid
+            where u.userid=#{userId}
+        </select>
 </mapper>

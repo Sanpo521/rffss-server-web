@@ -3,9 +3,7 @@ package io.renren.modules.rffss.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.rffss.entity.NfBusinEntity;
-import io.renren.modules.rffss.entity.NfRffsspEntity;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,5 +17,7 @@ public interface NfBusinService extends IService<NfBusinEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+
+    PageUtils queryPageIsUserId(Map<String, Object> params,Long userId);
 }
 

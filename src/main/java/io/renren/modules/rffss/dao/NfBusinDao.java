@@ -1,8 +1,10 @@
 package io.renren.modules.rffss.dao;
 
-import io.renren.modules.rffss.entity.NfBusinEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.renren.modules.rffss.entity.NfBusinEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 业务表
@@ -13,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface NfBusinDao extends BaseMapper<NfBusinEntity> {
-	
+    Page<NfBusinEntity> queryPageIsUserId(Page<NfBusinEntity> pageParam ,@Param("userId")Long userId);
 }

@@ -28,7 +28,7 @@ public class NfInboundAndOutboundEntity implements Serializable {
 	/**
 	 * 冷藏备案id
 	 */
-	private Long rffsspId;
+	private String rffsspId;
 	/**
 	 * 0入库1出库
 	 */
