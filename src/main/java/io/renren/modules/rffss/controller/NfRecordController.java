@@ -139,24 +139,29 @@ public class NfRecordController {
     @RequestMapping("/check/list")
     @RequiresPermissions("nfrecord:check:list")
     public R checkList(@RequestParam Map<String, Object> params){
+        List<String> btypes = new ArrayList<>();
+        btypes.add(RffssConstant.BUSIN_TYPE_APPLY_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_IN);
+        btypes.add(RffssConstant.BUSIN_TYPE_APPLY_OUT);
+        btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_OUT);
+        params.put("btype", btypes);
+        params.put("status", RffssConstant.BUSIN_STATUS_CHECK);
+        return list(params);
+    }
+
+    @RequestMapping("/statistics/list")
+    @RequiresPermissions("nfrecord:statistics:list")
+    public R statisticsList(@RequestParam Map<String, Object> params){
         if (params.containsKey("btype")){
             String[] b=params.get("btype").toString().split(",");
             if(b!=null && b.length>0){
                 List<String> btypes =  Arrays.asList(b);
                 params.put("btype", btypes);
             }
-        }else {
-            List<String> btypes = new ArrayList<>();
-            btypes.add(RffssConstant.BUSIN_TYPE_APPLY_IN);
-            btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_IN);
-            btypes.add(RffssConstant.BUSIN_TYPE_APPLY_OUT);
-            btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_OUT);
-            params.put("btype", btypes);
         }
         params.put("status", RffssConstant.BUSIN_STATUS_CHECK);
         return list(params);
     }
-
 
     private R list( Map<String, Object> params){
         PageUtils businPage = businService.queryPage(params);
