@@ -42,4 +42,43 @@
             </trim>
           order by b.lasttime desc
         </select>
+
+    <select id="getAddressCodeInbound" resultType="Map">
+        select  ad.code,ad.name, IFNULL((
+        select sum(o.num)
+        from nf_rffssp r
+        left join nf_inbound_and_outbound o on o.rffssp_id=r.id
+        left join nf_busin b on b.rffsspid=r.id
+        where r.storage_city=ad.code and o.types_of=#{typesOf}
+        <if test="startDate!=null and startDate!=''">
+            and date_format( o.operate_time, '%Y-%m-%d')  &gt;=  #{startDate}
+        </if>
+        <if test="startDate!=null and startDate!=''">
+            and 	date_format( o.operate_time, '%Y-%m-%d') &lt;= #{endDate}
+        </if>
+        and b.status=22  and b.btype in (10,11,20,21)
+        ), 0) as suma
+        from code_addiv ad
+        where ad.level=2
+        ORDER BY suma desc
+    </select>
+    <select id="queryWarnInbound" resultType="Map">
+        select r.apply_name as applyName,
+               IFNULL((
+                          select count(*)
+                          from nf_inbound_and_outbound o
+                          where o.type=0 and o.rffssp_id=r.id
+                            and date_format( o.operate_time, '%Y-%m')  =  #{date}
+                      ), 0) as ru,
+               IFNULL((
+                          select count(*)
+                          from nf_inbound_and_outbound o
+                          where o.type=1 and o.rffssp_id=r.id
+                            and date_format( o.operate_time, '%Y-%m')  =  #{date}
+                      ), 0) as chu
+        from nf_rffssp r
+        left join nf_busin b on b.rffsspid=r.id
+        where  b.status=22  and b.btype in (10,11,20,21)
+        having (ru=0 or chu=0)
+    </select>
 </mapper>

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 业务表
@@ -21,4 +22,8 @@ public interface NfBusinDao extends BaseMapper<NfBusinEntity> {
 
 
     Page<NfBusinEntity> queryPage(Page<NfBusinEntity> pageParam ,@Param("btype")List<String> btype,@Param("issueorg")List<String> issueorg,@Param("status")String status);
+
+    List<Map<String,Object>> getAddressCodeInbound(@Param("typesOf")String typesOf,@Param("startDate") String startDate,@Param("endDate") String endDate);
+
+    Page<Map<String,Object>>queryWarnInbound(Page<Map<String,Object>> pageParam,@Param("date")String date);
 }

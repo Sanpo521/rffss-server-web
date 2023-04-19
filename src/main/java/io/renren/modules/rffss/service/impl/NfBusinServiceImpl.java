@@ -68,5 +68,16 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
         return new PageUtils(baseMapper.queryPageIsUserId(pageParam,userId));
     }
 
+    @Override
+    public List<Map<String, Object>> getAddressCodeInbound(String typesOf, String startDate, String endDate) {
+        return baseMapper.getAddressCodeInbound(typesOf,startDate,endDate);
+    }
+
+    @Override
+    public PageUtils queryWarnInbound(Long page, Long limit, String date) {
+        Page<Map<String,Object>> pageParam=new Page<>(page,limit);
+        return new PageUtils(baseMapper.queryWarnInbound(pageParam,date));
+    }
+
 
 }

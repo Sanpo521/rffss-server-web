@@ -136,6 +136,11 @@ public class NfRecordController {
         return list(params);
     }
 
+    /**
+     * 审核完成列表
+     * @param params
+     * @return
+     */
     @RequestMapping("/check/list")
     @RequiresPermissions("nfrecord:check:list")
     public R checkList(@RequestParam Map<String, Object> params){
@@ -149,6 +154,11 @@ public class NfRecordController {
         return list(params);
     }
 
+    /**
+     * 根据行政机关查询备案申请
+     * @param params
+     * @return
+     */
     @RequestMapping("/statistics/list")
     @RequiresPermissions("nfrecord:statistics:list")
     public R statisticsList(@RequestParam Map<String, Object> params){
@@ -161,6 +171,39 @@ public class NfRecordController {
         }
         params.put("status", RffssConstant.BUSIN_STATUS_CHECK);
         return list(params);
+    }
+
+
+    /**
+     * 各地市入库数量统计
+     * @param typesOf
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @RequestMapping("/inbound/list")
+    @RequiresPermissions("nfrecord:inbound:list")
+    public R inboundList(@RequestParam(value = "typesOf") String  typesOf,
+                         @RequestParam(value = "startDate",required = false) String  startDate,
+                         @RequestParam(value = "endDate",required = false) String  endDate){
+
+        return R.ok().put("list", businService.getAddressCodeInbound(typesOf,startDate,endDate));
+    }
+
+    /**
+     * 查询每月没有出库和入库的备案
+     * @param page
+     * @param limit
+     * @param date
+     * @return
+     */
+    @RequestMapping("/warn/list")
+    @RequiresPermissions("nfrecord:warn:list")
+    public R warnList(@RequestParam(value = "page") Long  page,
+                         @RequestParam(value = "limit") Long  limit,
+                         @RequestParam(value = "date") String  date){
+
+        return R.ok().put("page", businService.queryWarnInbound(page,limit,date));
     }
 
     private R list( Map<String, Object> params){
