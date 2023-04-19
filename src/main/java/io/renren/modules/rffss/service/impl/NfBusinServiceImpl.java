@@ -69,8 +69,8 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
     }
 
     @Override
-    public List<Map<String, Object>> getAddressCodeInbound(String typesOf, String startDate, String endDate) {
-        return baseMapper.getAddressCodeInbound(typesOf,startDate,endDate);
+    public List<Map<String, Object>> getAddressCodeInbound(String typesOf, String startDate, String endDate,String type) {
+        return baseMapper.getAddressCodeInbound(typesOf,startDate,endDate,type);
     }
 
     @Override

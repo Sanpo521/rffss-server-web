@@ -21,7 +21,7 @@ public interface NfBusinService extends IService<NfBusinEntity> {
 
     PageUtils queryPageIsUserId(Map<String, Object> params,Long userId);
 
-    List<Map<String,Object>> getAddressCodeInbound(String typesOf,String startDate,String endDate);
+    List<Map<String,Object>> getAddressCodeInbound(String typesOf,String startDate,String endDate,String type);
 
     PageUtils queryWarnInbound(Long page,Long limit,String date);
 }

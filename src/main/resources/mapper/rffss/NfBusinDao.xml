@@ -56,6 +56,9 @@
         <if test="startDate!=null and startDate!=''">
             and 	date_format( o.operate_time, '%Y-%m-%d') &lt;= #{endDate}
         </if>
+        <if test="type!=null and type!=''">
+            and 	o.type=#{type}
+        </if>
         and b.status=22  and b.btype in (10,11,20,21)
         ), 0) as suma
         from code_addiv ad

@@ -184,10 +184,11 @@ public class NfRecordController {
     @RequestMapping("/inbound/list")
     @RequiresPermissions("nfrecord:inbound:list")
     public R inboundList(@RequestParam(value = "typesOf") String  typesOf,
+                         @RequestParam(value = "type",required = false) String  type,
                          @RequestParam(value = "startDate",required = false) String  startDate,
                          @RequestParam(value = "endDate",required = false) String  endDate){
 
-        return R.ok().put("list", businService.getAddressCodeInbound(typesOf,startDate,endDate));
+        return R.ok().put("list", businService.getAddressCodeInbound(typesOf,startDate,endDate,type));
     }
 
     /**
