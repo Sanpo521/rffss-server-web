@@ -16,6 +16,6 @@ import io.renren.modules.rffss.entity.NfInboundAndOutboundEntity;
  */
 public interface NfInboundAndOutboundService extends IService<NfInboundAndOutboundEntity> {
 
-    PageUtils queryPage(Page<NfInboundAndOutboundEntity> pageParam,Long type,Long rffsspId);
+    PageUtils queryPage(Page<NfInboundAndOutboundEntity> pageParam,Long type,String rffsspId);
 }
 

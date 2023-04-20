@@ -32,7 +32,7 @@ public class NfInboundAndOutboundController {
     public R list(   @RequestParam(value = "page") Long page,
                      @RequestParam(value = "limit") Long limit,
                      @RequestParam(value = "type",required = false) Long type,
-                     @RequestParam(value = "rffsspId",required = false) Long rffsspId
+                     @RequestParam(value = "rffsspId",required = false) String rffsspId
                      ){
         Page<NfInboundAndOutboundEntity> pageParam = new Page<>(page, limit);
         return R.ok().put("page", nfInboundAndOutboundService.queryPage(pageParam,type,rffsspId));

@@ -7,6 +7,7 @@ import io.renren.common.utils.PageUtils;
 import io.renren.modules.rffss.dao.NfInboundAndOutboundDao;
 import io.renren.modules.rffss.entity.NfInboundAndOutboundEntity;
 import io.renren.modules.rffss.service.NfInboundAndOutboundService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 
@@ -15,12 +16,12 @@ public class NfInboundAndOutboundServiceImpl extends ServiceImpl<NfInboundAndOut
 
 
     @Override
-    public PageUtils queryPage(Page<NfInboundAndOutboundEntity> pageParam, Long type, Long rffsspId) {
+    public PageUtils queryPage(Page<NfInboundAndOutboundEntity> pageParam, Long type, String rffsspId) {
         QueryWrapper<NfInboundAndOutboundEntity> query=new QueryWrapper<>();
         if(type!=null){
             query.eq("type",type);
         }
-        if(rffsspId!=null){
+        if(StringUtils.isNotEmpty(rffsspId)){
             query.eq("rffssp_id",rffsspId);
         }
         return new PageUtils(baseMapper.selectPage(pageParam,query));
