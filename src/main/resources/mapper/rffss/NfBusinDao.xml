@@ -49,7 +49,10 @@
         from nf_rffssp r
         left join nf_inbound_and_outbound o on o.rffssp_id=r.id
         left join nf_busin b on b.rffsspid=r.id
-        where r.storage_city=ad.code and o.types_of=#{typesOf}
+        where r.storage_city=ad.code
+        <if test="typesOf!=null and typesOf!=''">
+            and o.types_of=#{typesOf}
+        </if>
         <if test="startDate!=null and startDate!=''">
             and date_format( o.operate_time, '%Y-%m-%d')  &gt;=  #{startDate}
         </if>

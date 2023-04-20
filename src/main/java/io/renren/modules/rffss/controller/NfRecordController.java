@@ -183,7 +183,7 @@ public class NfRecordController {
      */
     @RequestMapping("/inbound/list")
     @RequiresPermissions("nfrecord:inbound:list")
-    public R inboundList(@RequestParam(value = "typesOf") String  typesOf,
+    public R inboundList(@RequestParam(value = "typesOf",required = false) String  typesOf,
                          @RequestParam(value = "type",required = false) String  type,
                          @RequestParam(value = "startDate",required = false) String  startDate,
                          @RequestParam(value = "endDate",required = false) String  endDate){
