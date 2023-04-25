@@ -747,3 +747,24 @@ INSERT INTO `code_addiv` VALUES ('232700', '大兴安岭地区', '230000', '2', 
 INSERT INTO `code_addiv` VALUES ('232701', '漠河市', '232700', '3', 1);
 INSERT INTO `code_addiv` VALUES ('232721', '呼玛县', '232700', '3', 1);
 INSERT INTO `code_addiv` VALUES ('232722', '塔河县', '232700', '3', 1);
+
+-- 出库入库
+
+CREATE TABLE `nf_inbound_and_outbound`  (
+                                            `id` bigint(0) NOT NULL,
+                                            `rffssp_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏备案id',
+                                            `type` int(0) NULL DEFAULT NULL COMMENT '0入库1出库',
+                                            `operate_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
+                                            `types_of` int(0) NULL DEFAULT NULL COMMENT '1食品2食用农产品',
+                                            `num` bigint(0) NULL DEFAULT NULL COMMENT '数量',
+                                            `unit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '单位',
+                                            `createtime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+                                            `lasttime` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
+                                            PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (400, 0, '审核完成', '', '', 0, 'log', 1);
+INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (401, 400, '出库or入库', 'nfrecord/check', 'nfrecord:check:list', 1, NULL, 1);
+INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (402, 400, '备案查询', 'nfrecord/statistics', 'nfrecord:statistics:list', 1, NULL, 2);
+INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (403, 400, '入库统计', 'nfrecord/inbound', 'nfrecord:inbound:list', 1, NULL, 3);
+INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (404, 400, '风险警告', 'nfrecord/warn', 'nfrecord:warn:list', 1, NULL, 4);
