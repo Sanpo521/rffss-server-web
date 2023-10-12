@@ -1,5 +1,6 @@
 package io.renren.modules.rffss.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
@@ -7,6 +8,8 @@ import io.renren.config.RffssConfig;
 import io.renren.modules.rffss.RffssConstant;
 import io.renren.modules.rffss.entity.*;
 import io.renren.modules.rffss.service.*;
+import io.renren.modules.rffssw.entity.UploadEntity;
+import io.renren.modules.rffssw.service.UploadService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +41,8 @@ public class NfRecordController {
     private NfRffsspUserService rffsspUserService;
     @Autowired
     private CodeOrganService codeOrganService;
-
+    @Autowired
+    private UploadService uploadService;
     @RequestMapping("/apply/list")
     @RequiresPermissions("nfrecord:apply:list")
     public R applyList(@RequestParam Map<String, Object> params){
@@ -341,6 +345,8 @@ public class NfRecordController {
         record.setAccept(accept);
         NfCheckedEntity checked = checkedService.getByBusinid(busin.getId(), RffssConstant.CHECKED_TYPE_CHECKED);
         record.setChecked(checked);
+        List<UploadEntity> uploadEntities=uploadService.getUpload(busin.getId(),busin.getBtype());
+        record.setUploadEntities(uploadEntities);
         return R.ok().put("record", record);
     }
 
@@ -435,6 +441,16 @@ public class NfRecordController {
             busin.setLasttime(new Date());
             busin.setStatus(businStatus);
             businService.saveOrUpdate(busin);
+            List<UploadEntity> uploadEntities = record.getUploadEntities();
+            if(CollectionUtils.isNotEmpty(uploadEntities)){
+                for (UploadEntity upload:uploadEntities){
+                    upload.setBusiness(busin.getBtype());
+                    upload.setBusinessId(busin.getId());
+                    upload.setLasttime(new Date());
+                    upload.setCreatetime(new Date());
+                    uploadService.saveOrUpdate(upload);
+                }
+            }
         }
         NfAgentEntity agent = record.getAgent();
         if (null != busin){

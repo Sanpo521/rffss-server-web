@@ -1,5 +1,6 @@
 package io.renren.modules.rffss.entity;
 
+import io.renren.modules.rffssw.entity.UploadEntity;
 import lombok.Data;
 
 import java.util.List;
@@ -47,4 +48,8 @@ public class NfRecordEntity {
      * 审核信息
      */
     NfCheckedEntity checked;
+    /**
+     * 附件
+     */
+    List<UploadEntity> uploadEntities;
 }
