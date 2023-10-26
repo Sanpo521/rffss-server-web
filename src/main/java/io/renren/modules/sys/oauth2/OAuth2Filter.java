@@ -11,6 +11,7 @@ package io.renren.modules.sys.oauth2;
 import com.google.gson.Gson;
 import io.renren.common.utils.HttpContextUtils;
 import io.renren.common.utils.R;
+import io.renren.modules.rffss.controller.qy.GyUploadController;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.authc.AuthenticationException;
@@ -23,6 +24,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * oauth2过滤器
@@ -45,6 +47,46 @@ public class OAuth2Filter extends AuthenticatingFilter {
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+//        WebApplicationContext ctx = RequestContextUtils.findWebApplicationContext(httpServletRequest);
+//        RequestMappingHandlerMapping mapping = ctx.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
+//        HandlerExecutionChain handler = null;
+//        try {
+//            handler = mapping.getHandler(httpServletRequest);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        HandlerMethod handlerClass = (HandlerMethod)handler.getHandler();
+//        Class<?> nowClass = handlerClass.getBeanType();
+//        Method method = handlerClass.getMethod();
+//        ShiroIgnoreAuth anonymousAccess = AnnotationUtils.getAnnotation(nowClass, ShiroIgnoreAuth.class);
+//        if (anonymousAccess != null) {
+//            return true;
+//        }
+//        anonymousAccess = AnnotationUtils.getAnnotation(method,ShiroIgnoreAuth.class);
+//        //如果方法上有 @ShiroIgnoreAuth 注解，则不进行权限校验
+//        if (anonymousAccess != null) {
+//            return true;
+//        }
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String requestURI = httpServletRequest.getRequestURI();
+
+        if(StringUtils.contains(requestURI,"qy/gyupload/info")){
+            return true;
+        }
+
+        GyUploadController example = new GyUploadController();
+
+        Class<?> clazz = example.getClass();
+        Method[] methods = clazz.getDeclaredMethods();
+
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(ShiroIgnoreAuth.class)) {
+                ShiroIgnoreAuth annotation = method.getAnnotation(ShiroIgnoreAuth.class);
+                System.out.println(1);
+            }
+        }
+
         if(((HttpServletRequest) request).getMethod().equals(RequestMethod.OPTIONS.name())){
             return true;
         }

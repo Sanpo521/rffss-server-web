@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffss.dao.qy.GyMarketRegulatedInformationDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.rffss.entity.qy.GyMarketRegulatedInformationEntity" id="gyMarketRegulatedInformationMap">
+        <result property="id" column="id"/>
+        <result property="entId" column="ent_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="inspectionTime" column="inspection_time"/>
+        <result property="didYouIssues" column="did_you_issues"/>
+        <result property="marketCoverageUpid" column="market_coverage_upid"/>
+        <result property="productQualityMarketUpid" column="product_quality_market_upid"/>
+    </resultMap>
+
+
+</mapper>

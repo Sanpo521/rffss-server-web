@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffss.dao.qy.GyBioerDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.rffss.entity.qy.GyBioerEntity" id="gyBioerMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="productionUnit" column="production_unit"/>
+        <result property="salesUnit" column="sales_unit"/>
+        <result property="unifiedSocialCreditCode" column="unified_social_credit_code"/>
+        <result property="address" column="address"/>
+        <result property="productAddress" column="product_address"/>
+        <result property="legalRepresentative" column="legal_representative"/>
+        <result property="productionAndBusinessScope" column="production_and_business_scope"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="cityregistrationAuthority" column="cityregistration_authority"/>
+        <result property="categoryOfEnterpriseQualityAndSafetyManagement" column="category_of_enterprise_quality_and_safety_management"/>
+        <result property="idNumber" column="id_number"/>
+        <result property="durationOfEmployment" column="duration_of_employment"/>
+        <result property="phone" column="phone"/>
+        <result property="reasonForStorage" column="reason_for_storage"/>
+        <result property="reasonForStorageCode" column="reason_for_storage_code"/>
+        <result property="implementationOfTwoRegulations" column="implementation_of_two_regulations"/>
+        <result property="implementationOfTwoRegulationsCode" column="implementation_of_two_regulations_code"/>
+        <result property="regulatoryLevel" column="regulatory_level"/>
+        <result property="regulatoryLevelCode" column="regulatory_level_code"/>
+        <result property="riskLevel" column="risk_level"/>
+        <result property="riskLevelCode" column="risk_level_code"/>
+        <result property="regulatoryMeasures" column="regulatory_measures"/>
+        <result property="regulatoryMeasuresCode" column="regulatory_measures_code"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

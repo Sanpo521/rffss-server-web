@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffss.dao.qy.GyEqmsaiiMonthDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.rffss.entity.qy.GyEqmsaiiMonthEntity" id="gyEqmsaiiMonthMap">
+        <result property="id" column="id"/>
+        <result property="jroqasd" column="jroqasd"/>
+        <result property="cocfaqso" column="cocfaqso"/>
+        <result property="epqascl" column="epqascl"/>
+        <result property="monthlySchedulingTime" column="monthly_scheduling_time"/>
+        <result property="isMonthlyScheduling" column="is_monthly_scheduling"/>
+        <result property="dcopqas" column="dcopqas"/>
+        <result property="rfns" column="rfns"/>
+        <result property="entId" column="ent_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>
