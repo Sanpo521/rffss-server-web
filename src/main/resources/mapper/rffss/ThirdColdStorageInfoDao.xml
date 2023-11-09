@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffss.dao.ThirdColdStorageInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.rffss.entity.ThirdColdStorageInfoEntity" id="thirdColdStorageInfoMap">
+        <result property="thirdcoldstorageinfoid" column="ThirdColdStorageInfoId"/>
+        <result property="applytime" column="APPLYTIME"/>
+        <result property="applyname" column="APPLYNAME"/>
+        <result property="applycontactinfo" column="APPLYCONTACTINFO"/>
+        <result property="proxyname" column="PROXYNAME"/>
+        <result property="proxycontactinfo" column="PROXYCONTACTINFO"/>
+        <result property="uniscid" column="UNISCID"/>
+        <result property="storageentname" column="STORAGEENTNAME"/>
+        <result property="lerep" column="LEREP"/>
+        <result property="contractname" column="CONTRACTNAME"/>
+        <result property="contracttel" column="CONTRACTTEL"/>
+        <result property="storagename" column="STORAGENAME"/>
+        <result property="storageprovince" column="STORAGEPROVINCE"/>
+        <result property="storageprovname" column="STORAGEPROVNAME"/>
+        <result property="storagecity" column="STORAGECITY"/>
+        <result property="storagecityname" column="STORAGECITYNAME"/>
+        <result property="storagecounty" column="STORAGECOUNTY"/>
+        <result property="storagecountyname" column="STORAGECOUNTYNAME"/>
+        <result property="storageaddress" column="STORAGEADDRESS"/>
+        <result property="storagepowerton" column="STORAGEPOWERTON"/>
+        <result property="storagepowercubicmeter" column="STORAGEPOWERCUBICMETER"/>
+        <result property="recnum" column="RECNUM"/>
+        <result property="rectime" column="RECTIME"/>
+        <result property="handleunitcode" column="HANDLEUNITCODE"/>
+        <result property="handleunit" column="HANDLEUNIT"/>
+        <result property="receiver" column="RECEIVER"/>
+        <result property="entrytime" column="ENTRYTIME"/>
+    </resultMap>
+
+
+</mapper>

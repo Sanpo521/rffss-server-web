@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -528,14 +527,14 @@ public class NfRecordController {
         save(record, RffssConstant.RFFSSP_STATUS_SUMBIT, null, RffssConstant.BUSIN_STATUS_SUMBIT);
 
         if(StringUtils.equals(saveoracle,"1")){
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
-            SimpleDateFormat sdf2=new SimpleDateFormat("yyyyMMdd");
+//            SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+//            SimpleDateFormat sdf2=new SimpleDateFormat("yyyyMMdd");
             ThirdColdStorageInfoEntity t=new ThirdColdStorageInfoEntity();
             NfRffsspEntity rffssp = record.getRffssp();
             if(rffssp!=null){
                 t.setThirdcoldstorageinfoid(rffssp.getId());
                 if(rffssp.getCreatetime()!=null){
-                    t.setApplytime(sdf2.format(rffssp.getCreatetime()));
+                    t.setApplytime(rffssp.getCreatetime());
                 }
                 t.setApplyname(rffssp.getApplyName());
                 t.setApplycontactinfo(rffssp.getApplyContactInfo());
@@ -562,10 +561,10 @@ public class NfRecordController {
                 t.setUniscid(rffssp.getUniscId());
                 t.setRecnum(rffssp.getRecNum());
                 if(rffssp.getRecTime()!=null){
-                    t.setRectime(sdf2.format(rffssp.getRecTime()));
+                    t.setRectime(rffssp.getRecTime());
                 }
                 if(rffssp.getEntryTime()!=null){
-                    t.setEntrytime(sdf.format(rffssp.getEntryTime()));
+                    t.setEntrytime(rffssp.getEntryTime());
                 }
                 if(rffssp.getIssueorg()!=null){
                     t.setHandleunitcode(rffssp.getIssueorg());

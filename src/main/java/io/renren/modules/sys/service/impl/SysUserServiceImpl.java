@@ -25,10 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -71,7 +68,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 			limit = Integer.parseInt((String)params.get(Constant.LIMIT));
 		}
 		List<SysUserEntity> sysUserEntityList = baseMapper.queryByUserList(username, createUserId);
-		PageUtils page = new PageUtils(sysUserEntityList, sysUserEntityList.size(), limit, curPage);
+		List<SysUserEntity> sysUserEntityListEx = new ArrayList<>();
+		int maxSize = sysUserEntityList.size();
+		if (limit*curPage<maxSize){
+			maxSize = limit*curPage;
+		}
+		for (int j=limit*(curPage-1); j<maxSize; j++){
+			sysUserEntityListEx.add(sysUserEntityList.get(j));
+		}
+
+		PageUtils page = new PageUtils(sysUserEntityListEx, sysUserEntityList.size(), limit, curPage);
 
 		return page;
 	}
