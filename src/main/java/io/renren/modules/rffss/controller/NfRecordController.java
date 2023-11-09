@@ -2,6 +2,7 @@ package io.renren.modules.rffss.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import io.renren.common.utils.ExcelUtil;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
 import io.renren.config.RffssConfig;
@@ -13,9 +14,13 @@ import io.renren.modules.rffssw.service.UploadService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zhaoxiubin
@@ -43,6 +48,9 @@ public class NfRecordController {
     private CodeOrganService codeOrganService;
     @Autowired
     private UploadService uploadService;
+    @Autowired
+    private ThirdColdStorageInfoService thirdColdStorageInfoService;
+
     @RequestMapping("/apply/list")
     @RequiresPermissions("nfrecord:apply:list")
     public R applyList(@RequestParam Map<String, Object> params){
@@ -178,6 +186,54 @@ public class NfRecordController {
     }
 
 
+    @RequestMapping({"/statistics/listExcel"})
+    public void listExcel(@RequestParam(required = false) String btype, @RequestParam(required = false) String issueorg, @RequestParam(required = false) String createTime, HttpServletResponse response) {
+        Map<String, Object> params = new HashMap();
+        if (StringUtils.isNotEmpty(btype)) {
+            params.put("btype", btype);
+        }
+
+        if (StringUtils.isNotEmpty(issueorg)) {
+            params.put("issueorg", issueorg);
+        }
+
+        if (StringUtils.isNotEmpty(createTime)) {
+            params.put("createTime", createTime);
+        }
+
+        if (params.containsKey("btype")) {
+            String[] b = params.get("btype").toString().split(",");
+            if (b != null && b.length > 0) {
+                List<String> btypes = Arrays.asList(b);
+                params.put("btype", btypes);
+            }
+        }
+
+        params.put("status", "22");
+        List<Map<String, Object>> mapList = this.businService.listExcel(params);
+        if (CollectionUtils.isNotEmpty(mapList)) {
+            List<String> columnList = new ArrayList();
+            columnList.add("县（市、区）");
+            columnList.add("备案号");
+            columnList.add("提供者名称");
+            columnList.add("冷库数");
+            columnList.add("备注");
+            List<List<String>> collect = (List)mapList.stream().map((item) -> {
+                List<String> str = new ArrayList();
+                String sheng = item.get("sheng") != null ? item.get("sheng").toString() : "";
+                String shi = item.get("shi") != null ? item.get("shi").toString() : "";
+                String xian = item.get("xian") != null ? item.get("xian").toString() : "";
+                str.add(sheng + shi + xian);
+                str.add(item.get("rec_num") != null ? item.get("rec_num").toString() : "");
+                str.add(item.get("apply_name") != null ? item.get("apply_name").toString() : "");
+                str.add(item.get("equipment_name_specification") != null ? item.get("equipment_name_specification").toString() : "");
+                str.add(item.get("remarks") != null ? item.get("remarks").toString() : "");
+                return str;
+            }).collect(Collectors.toList());
+            ExcelUtil.uploadExcelAboutUser(response, "统计.xls", columnList, collect);
+        }
+
+    }
     /**
      * 各地市入库数量统计
      * @param typesOf
@@ -391,11 +447,78 @@ public class NfRecordController {
         save(record, RffssConstant.RFFSSP_STATUS_SUMBIT, null, RffssConstant.BUSIN_STATUS_SUMBIT);
         return R.ok();
     }
+    @Value("${saveoracle}")
+    private String saveoracle;
+
 
     @RequestMapping("/applyc/save")
     @RequiresPermissions("nfrecord:applyc:save")
     public R applycSave(@RequestBody NfRecordEntity record){
         save(record, RffssConstant.RFFSSP_STATUS_SUMBIT, null, RffssConstant.BUSIN_STATUS_SUMBIT);
+
+        if(StringUtils.equals(saveoracle,"1")){
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+            SimpleDateFormat sdf2=new SimpleDateFormat("yyyyMMdd");
+            ThirdColdStorageInfoEntity t=new ThirdColdStorageInfoEntity();
+            NfRffsspEntity rffssp = record.getRffssp();
+            if(rffssp!=null){
+                t.setThirdcoldstorageinfoid(rffssp.getId());
+                if(rffssp.getCreatetime()!=null){
+                    t.setApplytime(sdf2.format(rffssp.getCreatetime()));
+                }
+                t.setApplyname(rffssp.getApplyName());
+                t.setApplycontactinfo(rffssp.getApplyContactInfo());
+                t.setStorageentname(rffssp.getStorageEntName());
+                t.setLerep(rffssp.getLeRep());
+                t.setContractname(rffssp.getContractName());
+                t.setContracttel(rffssp.getContractTel());
+                t.setStoragename(rffssp.getStorageName());
+                t.setStorageprovince(rffssp.getStorageProvince());
+                t.setStorageprovname(rffssp.getStorageProvName());
+                t.setStoragecity(rffssp.getStorageCity());
+                t.setStoragecityname(rffssp.getStorageCityName());
+                t.setStoragecounty(rffssp.getStorageCounty());
+                t.setStoragecountyname(rffssp.getStorageCountyName());
+                t.setStorageaddress(rffssp.getStorageAddress());
+                String storagePowerTon = rffssp.getStoragePowerTon();
+                if(StringUtils.isNotEmpty(storagePowerTon)){
+                    t.setStoragepowerton(Integer.parseInt(storagePowerTon));
+                }
+                String storagePowerCubicMeter = rffssp.getStoragePowerCubicMeter();
+                if(StringUtils.isNotEmpty(storagePowerCubicMeter)){
+                    t.setStoragepowercubicmeter(Integer.parseInt(storagePowerCubicMeter));
+                }
+                t.setUniscid(rffssp.getUniscId());
+                t.setRecnum(rffssp.getRecNum());
+                if(rffssp.getRecTime()!=null){
+                    t.setRectime(sdf2.format(rffssp.getRecTime()));
+                }
+                if(rffssp.getEntryTime()!=null){
+                    t.setEntrytime(sdf.format(rffssp.getEntryTime()));
+                }
+                if(rffssp.getIssueorg()!=null){
+                    t.setHandleunitcode(rffssp.getIssueorg());
+                    CodeOrganEntity codeOrgan = codeOrganService.getById(rffssp.getIssueorg());
+                    if(codeOrgan!=null){
+                        t.setHandleunit(codeOrgan.getName());
+                    }
+                }
+            }
+            NfAgentEntity agent = record.getAgent();
+            if(agent!=null){
+                t.setProxyname(agent.getName());
+                t.setProxycontactinfo(agent.getMobile());
+            }
+            NfCheckedEntity accept = record.getAccept();
+            if(accept!=null){
+                t.setReceiver(accept.getName());
+            }
+
+            thirdColdStorageInfoService.saveData(t);
+
+        }
+
+
         return R.ok();
     }
 

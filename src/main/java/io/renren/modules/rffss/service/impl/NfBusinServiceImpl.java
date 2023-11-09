@@ -40,7 +40,11 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
         if (params.containsKey("status")){
             status=params.get("status").toString();
         }
-        return new PageUtils(baseMapper.queryPage(pageParam,btype,issueorg,status));
+        String createTime = "";
+        if (params.containsKey("createTime")) {
+            createTime = params.get("createTime").toString();
+        }
+        return new PageUtils(baseMapper.queryPage(pageParam,btype,issueorg,status,createTime));
     }
 
     /**
@@ -80,4 +84,31 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
     }
 
 
+    @Override
+    public List<Map<String, Object>> listExcel(Map<String, Object> params) {
+        List<String> btype=new ArrayList<>();
+        if (params.containsKey("btype")){
+            btype=(List)params.get("btype");
+        }
+
+        List<String> issueorg=new ArrayList<>();
+        if (params.containsKey("issueorg")){
+            CodeOrganEntity codeOrgan = codeOrganService.getById(params.get("issueorg").toString());
+            if(codeOrgan!=null){
+                issueorg.add(codeOrgan.getCode());
+            }
+            issueorg= getCode(issueorg,codeOrgan.getCode(),codeOrganService);
+        }
+        String status = "";
+        if (params.containsKey("status")) {
+            status = params.get("status").toString();
+        }
+
+        String createTime = "";
+        if (params.containsKey("createTime")) {
+            createTime = params.get("createTime").toString();
+        }
+
+        return baseMapper.listExcel((List)btype, (List)issueorg, status, createTime);
+    }
 }

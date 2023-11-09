@@ -16,9 +16,18 @@
 			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
 		where ur.user_id = #{userId}
 	</select>
-	
+
 	<select id="queryByUserName" resultType="io.renren.modules.sys.entity.SysUserEntity">
-		select * from sys_user where username = #{username}
+		select a.*,(select name from code_organ where code_organ.code=a.orgcode) as orgname from sys_user a where username = #{username}
+	</select>
+
+	<select id="queryByUserList" resultType="io.renren.modules.sys.entity.SysUserEntity">
+		select a.*,(select name from code_organ where code_organ.code=a.orgcode) as orgname from sys_user a
+		where username like CONCAT(CONCAT('%',#{username}),'%')
+		<if test="create_user_id !=null">
+			and create_user_id = #{create_user_id}
+		</if>
+
 	</select>
 
 </mapper>

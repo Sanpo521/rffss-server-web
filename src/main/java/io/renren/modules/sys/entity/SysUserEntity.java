@@ -92,5 +92,9 @@ public class SysUserEntity implements Serializable {
 	 * 创建时间
 	 */
 	private Date createTime;
-
+	/**
+	 * 角色ID列表
+	 */
+	@TableField(exist=false)
+	private String orgname;
 }

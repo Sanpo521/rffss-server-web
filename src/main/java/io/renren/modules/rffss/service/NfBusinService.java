@@ -24,5 +24,7 @@ public interface NfBusinService extends IService<NfBusinEntity> {
     List<Map<String,Object>> getAddressCodeInbound(String typesOf,String startDate,String endDate,String type);
 
     PageUtils queryWarnInbound(Long page,Long limit,String date);
+
+    List<Map<String, Object>> listExcel(Map<String, Object> params);
 }
 

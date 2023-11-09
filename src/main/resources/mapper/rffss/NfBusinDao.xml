@@ -39,6 +39,9 @@
                         #{b}
                     </foreach>
                 </if>
+                <if test="createTime !=null and createTime!=''">
+                    and TO_DAYS(b.createtime)=TO_DAYS(#{createTime})
+                </if>
             </trim>
           order by b.lasttime desc
         </select>
@@ -86,5 +89,37 @@
         left join nf_busin b on b.rffsspid=r.id
         where  b.status=22  and b.btype in (10,11,20,21)
         having (ru=0 or chu=0)
+    </select>
+
+
+
+    <select id="listExcel" resultType="Map">
+        select n.storage_name, n.rec_num, n.remarks,n.equipment_name_specification,n.apply_name,sheng.name as sheng,shi.name as shi ,xian. name  as xian
+        from  nf_rffssp  n
+        LEFT JOIN code_addiv as sheng on n.storage_province=sheng.code
+        LEFT JOIN code_addiv as shi on n.storage_city=shi.code
+        LEFT JOIN code_addiv as  xian on n.storage_county=xian.code
+        LEFT JOIN nf_busin as b  on b.rffsspid=n.id
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="status !=null">
+                and b.status = #{status}
+            </if>
+            <if test="btype != null and btype.size() > 0">
+                and b.btype in
+                <foreach collection="btype" index="idx" item="a" separator="," open="(" close=")">
+                    #{a}
+                </foreach>
+            </if>
+            <if test="issueorg != null and issueorg.size() > 0">
+                and n.issueorg in
+                <foreach collection="issueorg" index="idx" item="b" separator="," open="(" close=")">
+                    #{b}
+                </foreach>
+            </if>
+            <if test="createTime !=null and createTime!=''">
+                and TO_DAYS(b.createtime)=TO_DAYS(#{createTime})
+            </if>
+        </trim>
+        order by b.lasttime desc
     </select>
 </mapper>

@@ -71,7 +71,10 @@ public class OAuth2Filter extends AuthenticatingFilter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String requestURI = httpServletRequest.getRequestURI();
 
-        if(StringUtils.contains(requestURI,"qy/gyupload/info")){
+        ///临时token处理方法
+        if(StringUtils.contains(requestURI,"qy/gyupload/info")
+        || StringUtils.contains(requestURI,"statistics/listExcel")
+        ){
             return true;
         }
 
