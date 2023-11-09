@@ -11,15 +11,19 @@ import java.util.Map;
 
 /**
  * 业务表
- * 
+ *
  * @author zhaoxiubin
  * @email sanpo521@gmail.com
  * @date 2022-11-04 08:54:30
  */
 @Mapper
 public interface NfBusinDao extends BaseMapper<NfBusinEntity> {
+
+    NfBusinEntity queryByRffsspid(@Param("rffsspid")String rffsspid);
+
     Page<NfBusinEntity> queryPageIsUserId(Page<NfBusinEntity> pageParam ,@Param("userId")Long userId);
 
+    Page<NfBusinEntity> queryPageEx(Page<NfBusinEntity> pageParam ,@Param("btype")List<String> btype,@Param("issueorg")List<String> issueorg,@Param("status")String status, @Param("key") String key);
 
     Page<NfBusinEntity> queryPage(Page<NfBusinEntity> pageParam ,@Param("btype")List<String> btype,@Param("issueorg")List<String> issueorg,@Param("status")String status, @Param("createTime") String createTime);
 

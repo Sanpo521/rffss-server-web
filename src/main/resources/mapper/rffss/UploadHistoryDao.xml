@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffss.dao.UploadHistoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.rffss.entity.UploadHistoryEntity" id="uploadHistoryMap">
+        <result property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="content" column="content"/>
+        <result property="business" column="business"/>
+        <result property="createtime" column="createtime"/>
+        <result property="lasttime" column="lasttime"/>
+    </resultMap>
+
+
+</mapper>

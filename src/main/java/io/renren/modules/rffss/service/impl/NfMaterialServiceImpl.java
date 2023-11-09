@@ -1,19 +1,18 @@
 package io.renren.modules.rffss.service.impl;
 
-import io.renren.modules.rffss.entity.NfAgentEntity;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
-
 import io.renren.modules.rffss.dao.NfMaterialDao;
+import io.renren.modules.rffss.entity.NfAgentEntity;
 import io.renren.modules.rffss.entity.NfMaterialEntity;
 import io.renren.modules.rffss.service.NfMaterialService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Service("nfMaterialService")
@@ -34,6 +33,15 @@ public class NfMaterialServiceImpl extends ServiceImpl<NfMaterialDao, NfMaterial
         QueryWrapper queryWrapper = new QueryWrapper<NfMaterialEntity>();
         queryWrapper.eq("businid", businid);
         queryWrapper.eq("mtype", mtype);
+        queryWrapper.orderByAsc("morder");
+        List<NfMaterialEntity> materialEntities = this.getBaseMapper().selectList(queryWrapper);
+        return materialEntities;
+    }
+
+    @Override
+    public List<NfMaterialEntity> getsByBusinid(String businid) {
+        QueryWrapper queryWrapper = new QueryWrapper<NfMaterialEntity>();
+        queryWrapper.eq("businid", businid);
         queryWrapper.orderByAsc("morder");
         List<NfMaterialEntity> materialEntities = this.getBaseMapper().selectList(queryWrapper);
         return materialEntities;

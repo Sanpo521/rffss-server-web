@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface UploadService extends IService<UploadEntity>{
     List<UploadEntity> getUpload(String businessId, String business);
+
+    List<UploadEntity> getUpload(String businessId);
 }

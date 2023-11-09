@@ -2,7 +2,6 @@ package io.renren.modules.rffss.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
-import io.renren.modules.rffss.entity.NfAgentEntity;
 import io.renren.modules.rffss.entity.NfMaterialEntity;
 
 import java.util.List;
@@ -25,6 +24,8 @@ public interface NfMaterialService extends IService<NfMaterialEntity> {
      * @return
      */
     List<NfMaterialEntity> getsByBusinid(String businid, String mtype);
+
+    List<NfMaterialEntity> getsByBusinid(String businid);
 
     /**
      * 根据业务ID查询附属信息

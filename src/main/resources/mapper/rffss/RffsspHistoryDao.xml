@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.rffss.dao.RffsspHistoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.rffss.entity.RffsspHistoryEntity" id="rffsspHistoryMap">
+        <result property="id" column="id"/>
+        <result property="status" column="status"/>
+        <result property="createtime" column="createtime"/>
+        <result property="lasttime" column="lasttime"/>
+        <result property="valid" column="valid"/>
+        <result property="issueorg" column="issueorg"/>
+        <result property="applyTime" column="apply_time"/>
+        <result property="applyName" column="apply_name"/>
+        <result property="applyContactInfo" column="apply_contact_info"/>
+        <result property="uniscId" column="unisc_id"/>
+        <result property="storageEntName" column="storage_ent_name"/>
+        <result property="leRep" column="le_rep"/>
+        <result property="leRepNo" column="le_rep_no"/>
+        <result property="contractName" column="contract_name"/>
+        <result property="contractTel" column="contract_tel"/>
+        <result property="storageName" column="storage_name"/>
+        <result property="storageProvince" column="storage_province"/>
+        <result property="storageProvName" column="storage_prov_name"/>
+        <result property="storageCity" column="storage_city"/>
+        <result property="storageCityName" column="storage_city_name"/>
+        <result property="storageCounty" column="storage_county"/>
+        <result property="storageCountyName" column="storage_county_name"/>
+        <result property="storageAddress" column="storage_address"/>
+        <result property="storagePowerTon" column="storage_power_ton"/>
+        <result property="storagePowerCubicMeter" column="storage_power_cubic_meter"/>
+        <result property="recNum" column="rec_num"/>
+        <result property="recTime" column="rec_time"/>
+        <result property="entryTime" column="entry_time"/>
+        <result property="safetyStandards" column="safety_standards"/>
+        <result property="storageArea" column="storage_area"/>
+        <result property="storageCapacity" column="storage_capacity"/>
+        <result property="equipmentNameSpecification" column="equipment_name_specification"/>
+        <result property="humidityControlRange" column="humidity_control_range"/>
+        <result property="bumberExplicitThermometers" column="bumber_explicit_thermometers"/>
+        <result property="keepClean" column="keep_clean"/>
+        <result property="isGround" column="is_ground"/>
+        <result property="isDisinfect" column="is_disinfect"/>
+        <result property="otherCategories" column="other_categories"/>
+        <result property="remarks" column="remarks"/>
+        <result property="canclecause" column="canclecause"/>
+    </resultMap>
+
+
+</mapper>

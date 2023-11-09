@@ -768,3 +768,118 @@ INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `p
 INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (402, 400, '备案查询', 'nfrecord/statistics', 'nfrecord:statistics:list', 1, NULL, 2);
 INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (403, 400, '入库统计', 'nfrecord/inbound', 'nfrecord:inbound:list', 1, NULL, 3);
 INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (404, 400, '风险警告', 'nfrecord/warn', 'nfrecord:warn:list', 1, NULL, 4);
+
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for nf_agent_history
+-- ----------------------------
+CREATE TABLE `nf_agent_history`  (
+                                     `id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '代理人ID',
+                                     `realid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                     `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代理人姓名',
+                                     `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代理人联系方式',
+                                     `businid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '业务id: NfBusinEntity id',
+                                     `createtime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+                                     `lasttime` datetime(0) NULL DEFAULT NULL COMMENT '最后操作时间',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     INDEX `businid`(`businid`) USING BTREE,
+                                     INDEX `realid`(`realid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代理人' ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `nf_busin_history`  (
+                                     `id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '业务ID',
+                                     `realid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                     `btype` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '业务类型： 10：内网备案申报 20：外网备案申报 11：内网备案变更申报 21：外网备案变更申报 12：内网备案注销申报 22：外网备案注销申报',
+                                     `status` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '业务状态 21：未完成  11：受理不通过  21：审核不通过 22：待受理  12：受理通过  22：审核通过',
+                                     `rffsspid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '备案ID',
+                                     `createtime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+                                     `lasttime` datetime(0) NULL DEFAULT NULL COMMENT '最后操作时间',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     INDEX `rffsspid`(`rffsspid`) USING BTREE,
+                                     INDEX `realid`(`realid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '业务表' ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `nf_material_history`  (
+                                        `id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '材料ID',
+                                        `realid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `mtype` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '材料类型：10 冷藏冷冻贮存场所布局图 20 法定代表人或者负责人身份证明复印件人像面 21 法定代表人或者负责人身份证明复印件国徽面 30 所提交资料真实性承诺书',
+                                        `morder` int(0) NULL DEFAULT NULL COMMENT '同材料类型的顺序号',
+                                        `mpath` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '材料地址',
+                                        `businid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '业务id: NfBusinEntity id',
+                                        `createtime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+                                        `lasttime` datetime(0) NULL DEFAULT NULL COMMENT '最后操作时间',
+                                        PRIMARY KEY (`id`) USING BTREE,
+                                        INDEX `businid`(`businid`) USING BTREE,
+                                        INDEX `realid`(`realid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '材料表' ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `nf_rffssp_history`  (
+                                      `id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '冷藏冷冻食品贮存服务提供者ID',
+                                      `realid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                      `status` tinyint(0) NOT NULL COMMENT '状态 1 录入  2 提交  3 业务完成',
+                                      `createtime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+                                      `lasttime` datetime(0) NULL DEFAULT NULL COMMENT '最后操作时间',
+                                      `valid` int(0) NOT NULL COMMENT '是否有效：1有效 0无效',
+                                      `issueorg` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '管理机构ID',
+                                      `apply_time` datetime(0) NULL DEFAULT NULL COMMENT '办理备案日期',
+                                      `apply_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请人姓名',
+                                      `apply_contact_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请人联系方式',
+                                      `unisc_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '统一社会信用代码',
+                                      `storage_ent_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '从事冷藏冷冻食品贮存业务的非食品生产经营者名称',
+                                      `le_rep` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '法定代表人（负责人）',
+                                      `le_rep_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '法定代表人（负责人）身份证号码',
+                                      `contract_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系人',
+                                      `contract_tel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+                                      `storage_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库名称',
+                                      `storage_province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（省）代码',
+                                      `storage_prov_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（省）',
+                                      `storage_city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（市）代码',
+                                      `storage_city_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（市）',
+                                      `storage_county` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（区/县）代码',
+                                      `storage_county_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库地址（区/县）',
+                                      `storage_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '冷藏冷冻库详细地址',
+                                      `storage_power_ton` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '贮存能力（单位：吨）',
+                                      `storage_power_cubic_meter` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '贮存能力（单位：立方米）',
+                                      `rec_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备案编号',
+                                      `rec_time` datetime(0) NULL DEFAULT NULL COMMENT '备案日期',
+                                      `entry_time` datetime(0) NULL DEFAULT NULL COMMENT '入库时间',
+                                      `safety_standards` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）是否符合食品安全标准',
+                                      `storage_area` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）贮存面积',
+                                      `storage_capacity` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）贮存容积',
+                                      `equipment_name_specification` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）冷藏冷冻设施、设备名称规格及数量',
+                                      `humidity_control_range` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）温度、湿度控制范围',
+                                      `bumber_explicit_thermometers` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）可正确显示内部温度的温度计和外显式温度计数量',
+                                      `keep_clean` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）贮存设备、容器和工具是否无毒无害、保持清洁',
+                                      `is_ground` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '（贮存能力）是否分区分架分类存放食品，是否离地离墙10cm',
+                                      `is_disinfect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '是否有校验消毒清洁维护制度及记录',
+                                      `other_categories` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '其他非食品类贮存品类别',
+                                      `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                      `canclecause` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '注销原因',
+                                      PRIMARY KEY (`id`) USING BTREE,
+                                      INDEX `realid`(`realid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '冷藏冷冻食品贮存服务提供者' ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `nf_upload_history`  (
+                                      `id` bigint(0) NOT NULL AUTO_INCREMENT,
+                                      `realid` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                      `business_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务id',
+                                      `content` longblob NULL COMMENT '文件内容',
+                                      `business` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                      `createtime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+                                      `lasttime` datetime(0) NULL DEFAULT NULL COMMENT '最后操作时间',
+                                      PRIMARY KEY (`id`) USING BTREE,
+                                      INDEX `realid`(`realid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1711553728637476867 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;

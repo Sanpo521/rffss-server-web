@@ -11,6 +11,9 @@ import io.renren.modules.rffss.entity.*;
 import io.renren.modules.rffss.service.*;
 import io.renren.modules.rffssw.entity.UploadEntity;
 import io.renren.modules.rffssw.service.UploadService;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +38,19 @@ public class NfRecordController {
     @Autowired
     private NfBusinService businService;
     @Autowired
+    private BusinHistoryService businHistoryService;
+    @Autowired
     private NfRffsspService rffsspService;
+    @Autowired
+    private RffsspHistoryService rffsspHistoryService;
     @Autowired
     private NfAgentService agentService;
     @Autowired
+    private AgentHistoryService agentHistoryService;
+    @Autowired
     private NfMaterialService materialService;
+    @Autowired
+    private MaterialHistoryService materialHistoryService;
     @Autowired
     private NfCheckedService checkedService;
     @Autowired
@@ -48,6 +59,8 @@ public class NfRecordController {
     private CodeOrganService codeOrganService;
     @Autowired
     private UploadService uploadService;
+    @Autowired
+    private UploadHistoryService uploadHistoryService;
     @Autowired
     private ThirdColdStorageInfoService thirdColdStorageInfoService;
 
@@ -69,7 +82,7 @@ public class NfRecordController {
         btypes.add(RffssConstant.BUSIN_TYPE_CHANGE_IN);
         params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ING);
-        return list(params);
+        return listEx(params);
     }
 
     @RequestMapping("/cancel/list")
@@ -79,7 +92,7 @@ public class NfRecordController {
         btypes.add(RffssConstant.BUSIN_TYPE_CANCEL_IN);
         params.put("btype", btypes);
         params.put("status", RffssConstant.BUSIN_STATUS_ING);
-        return list(params);
+        return listEx(params);
     }
 
     @RequestMapping("/applya/list")
@@ -267,8 +280,41 @@ public class NfRecordController {
         return R.ok().put("page", businService.queryWarnInbound(page,limit,date));
     }
 
+    private R listEx( Map<String, Object> params){
+        PageUtils businPage = businService.queryPageEx(params);
+        return listOptEx(params, businPage);
+    }
+
+    private R listOptEx( Map<String, Object> params, PageUtils businPage){
+        List<NfBusinEntity> businList = (List<NfBusinEntity>) businPage.getList();
+        List<NfRecordEntity> recordList = new ArrayList<NfRecordEntity>(5);
+        for (NfBusinEntity busin: businList){
+            NfRecordEntity record = new NfRecordEntity();
+            record.setBusin(busin);
+            NfRffsspEntity rffssp = rffsspService.getById(busin.getRffsspid());
+            record.setRffssp(rffssp);
+            NfAgentEntity agent = agentService.getByBusinid(busin.getId());
+            record.setAgent(agent);
+            List<NfMaterialEntity> layouts = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_LAYOUT);
+            record.setLayout(layouts);
+            List<NfMaterialEntity> idCardHead = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_IDCARDHEAD);
+            record.setIdCardHead(idCardHead);
+            List<NfMaterialEntity> idCardNe = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_IDCARDNE);
+            record.setIdCardNe(idCardNe);
+            List<NfMaterialEntity> letterCommits = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_LETTERCOMMIT);
+            record.setLetterCommit(letterCommits);
+            recordList.add(record);
+        }
+        businPage.setList(recordList);
+        return R.ok().put("page", businPage);
+    }
+
     private R list( Map<String, Object> params){
         PageUtils businPage = businService.queryPage(params);
+        return listOpt(params, businPage);
+    }
+
+    private R listOpt( Map<String, Object> params, PageUtils businPage){
         List<NfBusinEntity> businList = (List<NfBusinEntity>) businPage.getList();
         List<NfRecordEntity> recordList = new ArrayList<NfRecordEntity>(5);
         for (NfBusinEntity busin: businList){
@@ -311,7 +357,7 @@ public class NfRecordController {
     @RequestMapping("/change/info/{id}")
     @RequiresPermissions("nfrecord:change:info")
     public R changeInfo(@PathVariable("id") String id){
-        return info(id);
+        return infoEx(id);
     }
 
     /**
@@ -320,7 +366,7 @@ public class NfRecordController {
     @RequestMapping("/cancel/info/{id}")
     @RequiresPermissions("nfrecord:cancel:info")
     public R cancelInfo(@PathVariable("id") String id){
-        return info(id);
+        return infoEx(id);
     }
 
     /**
@@ -375,6 +421,31 @@ public class NfRecordController {
     @RequiresPermissions("nfrecord:cancelc:info")
     public R cancelcInfo(@PathVariable("id") String id){
         return info(id);
+    }
+
+    private R infoEx(String id){
+        NfBusinEntity busin = businService.getById(id);
+        NfRecordEntity record = new NfRecordEntity();
+        record.setBusin(new NfBusinEntity());
+        NfRffsspEntity rffssp = rffsspService.getById(busin.getRffsspid());
+        if (null != rffssp.getIssueorg()){
+            CodeOrganEntity codeOrgan = codeOrganService.getByCode(rffssp.getIssueorg());
+            rffssp.setOrgname(codeOrgan.getName());
+        }
+        record.setRffssp(rffssp);
+        NfAgentEntity agent = agentService.getByBusinid(busin.getId());
+        record.setAgent(agent);
+        List<NfMaterialEntity> layouts = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_LAYOUT);
+        record.setLayout(layouts);
+        List<NfMaterialEntity> idCardHead = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_IDCARDHEAD);
+        record.setIdCardHead(idCardHead);
+        List<NfMaterialEntity> idCardNe = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_IDCARDNE);
+        record.setIdCardNe(idCardNe);
+        List<NfMaterialEntity> letterCommits = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_LETTERCOMMIT);
+        record.setLetterCommit(letterCommits);
+        List<UploadEntity> uploadEntities=uploadService.getUpload(busin.getId(),busin.getBtype());
+        record.setUploadEntities(uploadEntities);
+        return R.ok().put("record", record);
     }
 
     private R info(String id){
@@ -536,8 +607,77 @@ public class NfRecordController {
         return R.ok();
     }
 
+    private void backupRecord (NfRecordEntity record, String businType){
+        NfRffsspEntity rffssp = record.getRffssp();
+        if (null != businType && null != rffssp && StringUtils.isNotEmpty(rffssp.getId())){
+            MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+            mapperFactory.classMap(RffsspHistoryEntity.class, NfRffsspEntity.class)
+                    .byDefault().register();
+            MapperFacade mapper = mapperFactory.getMapperFacade();
+            NfRffsspEntity rffsspOld = rffsspService.getById(rffssp.getId());
+            RffsspHistoryEntity rffsspHistoryEntity = mapper.map(rffsspOld, RffsspHistoryEntity.class);
+            rffsspHistoryEntity.setId(IdWorker.getIdStr());
+            rffsspHistoryEntity.setRealid(rffsspOld.getId());
+            rffsspHistoryService.saveOrUpdate(rffsspHistoryEntity);
+
+            NfBusinEntity busin = businService.queryByRffsspid(rffssp.getId());
+            if (null != busin){
+                /***************NfAgentEntity*******************/
+                MapperFactory mapperFactoryA = new DefaultMapperFactory.Builder().build();
+                mapperFactoryA.classMap(AgentHistoryEntity.class, NfAgentEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperA = mapperFactoryA.getMapperFacade();
+                NfAgentEntity agentOld = agentService.getByBusinid(busin.getId());
+                AgentHistoryEntity agentHistoryEntity = mapperA.map(agentOld, AgentHistoryEntity.class);
+                agentHistoryEntity.setId(IdWorker.getIdStr());
+                agentHistoryEntity.setRealid(agentOld.getId());
+                agentHistoryService.saveOrUpdate(agentHistoryEntity);
+
+                /***************List<NfMaterialEntity>*******************/
+                MapperFactory mapperFactoryB = new DefaultMapperFactory.Builder().build();
+                mapperFactoryB.classMap(MaterialHistoryEntity.class, NfMaterialEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperB = mapperFactoryB.getMapperFacade();
+                List<NfMaterialEntity> nfMaterialEntities = materialService.getsByBusinid(busin.getId());
+                if(CollectionUtils.isNotEmpty(nfMaterialEntities)) {
+                    for (NfMaterialEntity nf : nfMaterialEntities) {
+                        MaterialHistoryEntity materialHistoryEntity = mapperB.map(nf, MaterialHistoryEntity.class);
+                        materialHistoryEntity.setId(IdWorker.getIdStr());
+                        materialHistoryEntity.setRealid(nf.getId());
+                        materialHistoryService.saveOrUpdate(materialHistoryEntity);
+                    }
+                }
+                /***************List<UploadEntity>*******************/
+                MapperFactory mapperFactoryC = new DefaultMapperFactory.Builder().build();
+                mapperFactoryC.classMap(UploadHistoryEntity.class, UploadEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperC = mapperFactoryC.getMapperFacade();
+                List<UploadEntity> uploadEntities = uploadService.getUpload(busin.getId());
+                if(CollectionUtils.isNotEmpty(uploadEntities)) {
+                    for (UploadEntity ul : uploadEntities) {
+                        UploadHistoryEntity uploadHistory = mapperC.map(ul, UploadHistoryEntity.class);
+                        uploadHistory.setId(IdWorker.getId());
+                        uploadHistory.setRealid(ul.getId());
+                        uploadHistoryService.saveOrUpdate(uploadHistory);
+                    }
+                }
+
+                /***************NfAgentEntity*******************/
+                MapperFactory mapperFactoryD = new DefaultMapperFactory.Builder().build();
+                mapperFactoryD.classMap(BusinHistoryEntity.class, NfBusinEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperD = mapperFactoryD.getMapperFacade();
+                BusinHistoryEntity businHistoryEntity = mapperD.map(busin, BusinHistoryEntity.class);
+                businHistoryEntity.setId(IdWorker.getIdStr());
+                businHistoryEntity.setRealid(busin.getId());
+                businHistoryService.saveOrUpdate(businHistoryEntity);
+                businService.removeById(busin.getId());
+            }
+        }
+    }
 
     private void save (NfRecordEntity record, String rffssStatus, String businType, String businStatus){
+        backupRecord(record, businType);
         NfRffsspEntity rffssp = record.getRffssp();
         if (null != rffssp){
             if (!StringUtils.isNotEmpty(rffssp.getId())){

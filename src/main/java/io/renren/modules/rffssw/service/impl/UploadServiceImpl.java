@@ -28,4 +28,11 @@ public class UploadServiceImpl extends ServiceImpl<UploadDao, UploadEntity> impl
 		qu.eq("business",business);
 		return Uploaddao.selectList(qu);
 	}
+
+	@Override
+	public List<UploadEntity> getUpload(String businessId) {
+		QueryWrapper<UploadEntity> qu=new QueryWrapper<>();
+		qu.eq("business_id",businessId);
+		return Uploaddao.selectList(qu);
+	}
 }

@@ -21,6 +21,37 @@ import java.util.Map;
 public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> implements NfBusinService {
     @Autowired
     private CodeOrganService codeOrganService;
+
+    @Override
+    public NfBusinEntity queryByRffsspid(String rffsspid){
+        return baseMapper.queryByRffsspid(rffsspid);
+    }
+
+    @Override
+    public PageUtils queryPageEx(Map<String, Object> params) {
+        Page<NfBusinEntity> pageParam = new Page<>(Long.parseLong(params.get("page").toString()), Long.parseLong(params.get("limit").toString()));
+        List<String> btype=new ArrayList<>();
+        if (params.containsKey("btype")){
+            btype=(List)params.get("btype");
+        }
+        String key = "";
+        if (params.containsKey("key")){
+            key=params.get("key").toString();
+        }
+        List<String> issueorg=new ArrayList<>();
+        if (params.containsKey("issueorg")){
+            CodeOrganEntity codeOrgan = codeOrganService.getById(params.get("issueorg").toString());
+            if(codeOrgan!=null){
+                issueorg.add(codeOrgan.getCode());
+            }
+            issueorg= getCode(issueorg,codeOrgan.getCode(),codeOrganService);
+        }
+        String status="";
+        if (params.containsKey("status")){
+            status=params.get("status").toString();
+        }
+        return new PageUtils(baseMapper.queryPageEx(pageParam,btype,issueorg,status,key));
+    }
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<NfBusinEntity> pageParam = new Page<>(Long.parseLong(params.get("page").toString()), Long.parseLong(params.get("limit").toString()));

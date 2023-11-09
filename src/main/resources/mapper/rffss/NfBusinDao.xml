@@ -13,12 +13,27 @@
         <result property="lasttime" column="lasttime"/>
     </resultMap>
 
+    <select id="queryByRffsspid" resultMap="nfBusinMap">
+        select b.*  from nf_busin b where b.rffsspid=#{rffsspid}
+    </select>
+
         <select id="queryPageIsUserId" resultMap="nfBusinMap">
             select b.*  from nf_busin b
             left join nf_rffssp_user u on u.rffsspid=b.rffsspid
             where u.userid=#{userId}
             order by b.lasttime desc
         </select>
+
+    <select id="queryPageEx" resultMap="nfBusinMap">
+        select b.*  from nf_busin b
+        left join nf_rffssp r on r.id=b.rffsspid
+        where b.status = 22
+        and b.id not in (select rffsspid from nf_busin where b.status != 22)
+        <if test="key !=null">
+            and r.storage_name like CONCAT(CONCAT('%',#{key}),'%')
+        </if>
+        order by b.lasttime desc
+    </select>
 
         <select id="queryPage" resultMap="nfBusinMap">
             select b.*  from nf_busin b

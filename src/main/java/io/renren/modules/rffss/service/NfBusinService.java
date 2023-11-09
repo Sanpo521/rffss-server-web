@@ -16,8 +16,11 @@ import java.util.Map;
  */
 public interface NfBusinService extends IService<NfBusinEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    NfBusinEntity queryByRffsspid(String rffsspid);
 
+    PageUtils queryPageEx(Map<String, Object> params);
+
+    PageUtils queryPage(Map<String, Object> params);
 
     PageUtils queryPageIsUserId(Map<String, Object> params,Long userId);
 

@@ -11,6 +11,9 @@ import io.renren.modules.rffss.service.*;
 import io.renren.modules.rffssw.entity.NfUserEntity;
 import io.renren.modules.rffssw.entity.UploadEntity;
 import io.renren.modules.rffssw.service.UploadService;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +37,19 @@ public class WebNfRecordController {
     @Autowired
     private NfBusinService businService;
     @Autowired
+    private BusinHistoryService businHistoryService;
+    @Autowired
     private NfRffsspService rffsspService;
+    @Autowired
+    private RffsspHistoryService rffsspHistoryService;
     @Autowired
     private NfAgentService agentService;
     @Autowired
+    private AgentHistoryService agentHistoryService;
+    @Autowired
     private NfMaterialService materialService;
+    @Autowired
+    private MaterialHistoryService materialHistoryService;
     @Autowired
     private NfCheckedService checkedService;
     @Autowired
@@ -47,6 +58,8 @@ public class WebNfRecordController {
     private CodeOrganService codeOrganService;
     @Autowired
     private UploadService uploadService;
+    @Autowired
+    private UploadHistoryService uploadHistoryService;
     /**
      * 列表
      */
@@ -89,7 +102,7 @@ public class WebNfRecordController {
     public R info(@PathVariable("id") String id){
         NfBusinEntity busin = businService.getById(id);
         NfRecordEntity record = new NfRecordEntity();
-        record.setBusin(busin);
+//        record.setBusin(busin);
         NfRffsspEntity rffssp = rffsspService.getById(busin.getRffsspid());
         if (null != rffssp.getIssueorg() && StringUtils.isNotEmpty(rffssp.getIssueorg())){
             CodeOrganEntity codeOrgan = codeOrganService.getByCode(rffssp.getIssueorg());
@@ -106,10 +119,10 @@ public class WebNfRecordController {
         record.setIdCardNe(idCardNe);
         List<NfMaterialEntity> letterCommits = materialService.getsByBusinid(busin.getId(), RffssConstant.MATERIAL_TYPE_LETTERCOMMIT);
         record.setLetterCommit(letterCommits);
-        NfCheckedEntity accept = checkedService.getByBusinid(busin.getId(), RffssConstant.CHECKED_TYPE_ACCEPT);
-        record.setAccept(accept);
-        NfCheckedEntity checked = checkedService.getByBusinid(busin.getId(), RffssConstant.CHECKED_TYPE_CHECKED);
-        record.setChecked(checked);
+//        NfCheckedEntity accept = checkedService.getByBusinid(busin.getId(), RffssConstant.CHECKED_TYPE_ACCEPT);
+//        record.setAccept(accept);
+//        NfCheckedEntity checked = checkedService.getByBusinid(busin.getId(), RffssConstant.CHECKED_TYPE_CHECKED);
+//        record.setChecked(checked);
         List<UploadEntity> uploadEntities=uploadService.getUpload(busin.getId(),busin.getBtype());
         record.setUploadEntities(uploadEntities);
         return R.ok().put("record", record);
@@ -137,7 +150,77 @@ public class WebNfRecordController {
         return R.ok();
     }
 
+    private void backupRecord (NfRecordEntity record, String businType){
+        NfRffsspEntity rffssp = record.getRffssp();
+        if (RffssConstant.BUSIN_STATUS_SUMBIT == businType && null != rffssp && StringUtils.isNotEmpty(rffssp.getId())){
+            MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+            mapperFactory.classMap(RffsspHistoryEntity.class, NfRffsspEntity.class)
+                    .byDefault().register();
+            MapperFacade mapper = mapperFactory.getMapperFacade();
+            NfRffsspEntity rffsspOld = rffsspService.getById(rffssp.getId());
+            RffsspHistoryEntity rffsspHistoryEntity = mapper.map(rffsspOld, RffsspHistoryEntity.class);
+            rffsspHistoryEntity.setId(IdWorker.getIdStr());
+            rffsspHistoryEntity.setRealid(rffsspOld.getId());
+            rffsspHistoryService.saveOrUpdate(rffsspHistoryEntity);
+
+            NfBusinEntity busin = businService.queryByRffsspid(rffssp.getId());
+            if (null != busin){
+                /***************NfAgentEntity*******************/
+                MapperFactory mapperFactoryA = new DefaultMapperFactory.Builder().build();
+                mapperFactoryA.classMap(AgentHistoryEntity.class, NfAgentEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperA = mapperFactoryA.getMapperFacade();
+                NfAgentEntity agentOld = agentService.getByBusinid(busin.getId());
+                AgentHistoryEntity agentHistoryEntity = mapperA.map(agentOld, AgentHistoryEntity.class);
+                agentHistoryEntity.setId(IdWorker.getIdStr());
+                agentHistoryEntity.setRealid(agentOld.getId());
+                agentHistoryService.saveOrUpdate(agentHistoryEntity);
+
+                /***************List<NfMaterialEntity>*******************/
+                MapperFactory mapperFactoryB = new DefaultMapperFactory.Builder().build();
+                mapperFactoryB.classMap(MaterialHistoryEntity.class, NfMaterialEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperB = mapperFactoryB.getMapperFacade();
+                List<NfMaterialEntity> nfMaterialEntities = materialService.getsByBusinid(busin.getId());
+                if(CollectionUtils.isNotEmpty(nfMaterialEntities)) {
+                    for (NfMaterialEntity nf : nfMaterialEntities) {
+                        MaterialHistoryEntity materialHistoryEntity = mapperB.map(nf, MaterialHistoryEntity.class);
+                        materialHistoryEntity.setId(IdWorker.getIdStr());
+                        materialHistoryEntity.setRealid(nf.getId());
+                        materialHistoryService.saveOrUpdate(materialHistoryEntity);
+                    }
+                }
+                /***************List<UploadEntity>*******************/
+                MapperFactory mapperFactoryC = new DefaultMapperFactory.Builder().build();
+                mapperFactoryC.classMap(UploadHistoryEntity.class, UploadEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperC = mapperFactoryC.getMapperFacade();
+                List<UploadEntity> uploadEntities = uploadService.getUpload(busin.getId());
+                if(CollectionUtils.isNotEmpty(uploadEntities)) {
+                    for (UploadEntity ul : uploadEntities) {
+                        UploadHistoryEntity uploadHistory = mapperC.map(ul, UploadHistoryEntity.class);
+                        uploadHistory.setId(IdWorker.getId());
+                        uploadHistory.setRealid(ul.getId());
+                        uploadHistoryService.saveOrUpdate(uploadHistory);
+                    }
+                }
+
+                /***************NfAgentEntity*******************/
+                MapperFactory mapperFactoryD = new DefaultMapperFactory.Builder().build();
+                mapperFactoryD.classMap(BusinHistoryEntity.class, NfBusinEntity.class)
+                        .byDefault().register();
+                MapperFacade mapperD = mapperFactoryD.getMapperFacade();
+                BusinHistoryEntity businHistoryEntity = mapperD.map(busin, BusinHistoryEntity.class);
+                businHistoryEntity.setId(IdWorker.getIdStr());
+                businHistoryEntity.setRealid(busin.getId());
+                businHistoryService.saveOrUpdate(businHistoryEntity);
+                businService.removeById(busin.getId());
+            }
+        }
+    }
+
     private void saveRecord(NfRecordEntity record,  String rffssStatus, String businStatus){
+        backupRecord(record, businStatus);
         NfRffsspEntity rffssp = record.getRffssp();
         if (null != rffssp){
             if (!StringUtils.isNotEmpty(rffssp.getId())){
