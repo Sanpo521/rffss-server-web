@@ -1,18 +1,18 @@
 package io.renren.modules.rffss.service.impl;
 
-import io.renren.modules.rffss.entity.NfAgentEntity;
-import io.renren.modules.rffss.entity.NfMaterialEntity;
-import org.springframework.stereotype.Service;
-import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
-
 import io.renren.modules.rffss.dao.NfCheckedDao;
+import io.renren.modules.rffss.entity.NfAgentEntity;
 import io.renren.modules.rffss.entity.NfCheckedEntity;
 import io.renren.modules.rffss.service.NfCheckedService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Service("nfCheckedService")
@@ -33,7 +33,13 @@ public class NfCheckedServiceImpl extends ServiceImpl<NfCheckedDao, NfCheckedEnt
         QueryWrapper queryWrapper = new QueryWrapper<NfCheckedEntity>();
         queryWrapper.eq("businid", businid);
         queryWrapper.eq("ctype", ctype);
-        NfCheckedEntity checkedEntity = this.getBaseMapper().selectOne(queryWrapper);
+        queryWrapper.orderByDesc("lasttime");
+        List<NfCheckedEntity> checkedEntityList = this.getBaseMapper().selectList(queryWrapper);
+        NfCheckedEntity checkedEntity = null;
+        if (null != checkedEntityList && checkedEntityList.size()>0){
+            checkedEntity = checkedEntityList.get(0);
+        }
+//        NfCheckedEntity checkedEntity = this.getBaseMapper().(queryWrapper);
         return checkedEntity;
     }
 
