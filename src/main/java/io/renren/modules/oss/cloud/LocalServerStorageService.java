@@ -1,10 +1,6 @@
 package io.renren.modules.oss.cloud;
 
-import com.qcloud.cos.COSClient;
-import com.qcloud.cos.ClientConfig;
-import com.qcloud.cos.sign.Credentials;
 import io.renren.common.exception.RRException;
-import io.renren.common.utils.DateUtils;
 import io.renren.common.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;

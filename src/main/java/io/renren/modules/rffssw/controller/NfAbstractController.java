@@ -1,11 +1,8 @@
 package io.renren.modules.rffssw.controller;
 
 import io.renren.modules.rffssw.entity.NfUserEntity;
-import io.renren.modules.sys.entity.SysUserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author zhaoxiubin

@@ -3,7 +3,6 @@ package io.renren.modules.rffss.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.rffss.entity.NfCheckedEntity;
-import io.renren.modules.rffss.entity.NfMaterialEntity;
 
 import java.util.Map;
 

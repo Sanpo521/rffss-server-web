@@ -2,7 +2,6 @@ package io.renren.modules.rffssw.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.modules.rffssw.entity.NfUserEntity;
-import io.renren.modules.sys.entity.SysUserEntity;
 
 public interface NfUserService extends IService<NfUserEntity> {
     /**

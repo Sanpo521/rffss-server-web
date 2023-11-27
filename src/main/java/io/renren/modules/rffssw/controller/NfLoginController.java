@@ -1,13 +1,10 @@
 package io.renren.modules.rffssw.controller;
 
-import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import io.renren.common.utils.R;
 import io.renren.modules.rffssw.entity.NfUserEntity;
+import io.renren.modules.rffssw.service.NfCaptchaService;
 import io.renren.modules.rffssw.service.NfUserService;
 import io.renren.modules.rffssw.service.NfUserTokenService;
-import io.renren.modules.rffssw.service.NfCaptchaService;
-import io.renren.modules.sys.entity.SysUserEntity;
 import io.renren.modules.sys.form.SysLoginForm;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;

@@ -8,7 +8,6 @@ import io.renren.common.utils.DateUtils;
 import io.renren.modules.rffssw.dao.NfCaptchaDao;
 import io.renren.modules.rffssw.entity.NfCaptchaEntity;
 import io.renren.modules.rffssw.service.NfCaptchaService;
-import io.renren.modules.sys.entity.SysCaptchaEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -127,6 +127,9 @@ renren:
     # token有效时长，7天，单位秒
     expire: 604800
     header: token
+  test:
+    key: Key123456
+    number: 123
 
 rffss:
   idprefix: w
@@ -134,3 +137,15 @@ rffss:
   upload-path: d:/pdf/
 #配置1往oracle保存
 saveoracle: 0
+
+## Ninefish 配置
+ninefish:
+  secure:
+    ## 是否开启加密解密
+    open: true
+    ## 是否使用随机密钥
+    random: true
+    ## 私有密钥
+    privateKey: 583399904D456374199136686D0AC8BEBF4087CB32A2B26D0C9DFDF618F65D3B
+    ## 公有密钥
+    publicKey: 04F90BBD5DB2E5B1BC6AFC09B256851915DA4963C37DFCB88A774D5A9E600404ADC3A81B2145AD86370B4A0D668B79EFAACEC2C5DCB96DE45636BCD4288D603966

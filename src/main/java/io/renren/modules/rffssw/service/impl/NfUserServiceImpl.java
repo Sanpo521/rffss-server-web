@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.modules.rffssw.dao.NfUserDao;
 import io.renren.modules.rffssw.entity.NfUserEntity;
 import io.renren.modules.rffssw.service.NfUserService;
-import io.renren.modules.sys.entity.SysUserEntity;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Date;
 
 /**

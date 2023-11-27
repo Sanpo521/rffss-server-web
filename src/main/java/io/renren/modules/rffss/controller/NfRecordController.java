@@ -520,6 +520,70 @@ public class NfRecordController {
     @Value("${saveoracle}")
     private String saveoracle;
 
+    @RequestMapping("/applyc/update")
+    @RequiresPermissions("nfrecord:applyc:save")
+    public R applycUpdate(@RequestBody NfRecordEntity record){
+        save(record, RffssConstant.RFFSSP_STATUS_SUMBIT, null, RffssConstant.BUSIN_STATUS_SUMBIT);
+        return R.ok();
+    }
+
+    @RequestMapping("/applyc/delete")
+    @RequiresPermissions("nfrecord:applyc:save")
+    public R applycDelete(@RequestBody NfRecordEntity record){
+        NfRffsspEntity rffssp = record.getRffssp();
+        if (null != rffssp){
+            rffsspService.removeById(rffssp.getId());
+        }
+        NfBusinEntity busin = record.getBusin();
+        NfAgentEntity agent = record.getAgent();
+        if (null != busin){
+            agentService.removeById(agent.getId());
+        }
+        List<NfMaterialEntity> layouts = record.getLayout();
+        if (null != layouts && layouts.size()>0){
+            for (NfMaterialEntity material: layouts){
+                materialService.removeById(material.getId());
+            }
+        }
+        List<NfMaterialEntity> idCardHead = record.getIdCardHead();
+        if (null != idCardHead && idCardHead.size()>0){
+            for (NfMaterialEntity material: idCardHead){
+                materialService.removeById(material.getId());
+            }
+        }
+        List<NfMaterialEntity> idCardNe = record.getIdCardNe();
+        if (null != idCardNe && idCardNe.size()>0){
+            int i = 1;
+            for (NfMaterialEntity material: idCardNe){
+                materialService.removeById(material.getId());
+            }
+        }
+        List<NfMaterialEntity> letterCommits = record.getLetterCommit();
+        if (null != letterCommits && letterCommits.size()>0){
+            int i = 1;
+            for (NfMaterialEntity material: letterCommits){
+                materialService.removeById(material.getId());
+            }
+        }
+        NfCheckedEntity accept = record.getAccept();
+        if (null != accept && StringUtils.isNotEmpty(accept.getName())){
+            checkedService.removeById(accept.getId());
+        }
+        NfCheckedEntity checked = record.getChecked();
+        if (null != checked && StringUtils.isNotEmpty(checked.getName())){
+            checkedService.removeById(checked.getId());
+        }
+        if (null != busin){
+            List<UploadEntity> uploadEntities = record.getUploadEntities();
+            if(CollectionUtils.isNotEmpty(uploadEntities)){
+                for (UploadEntity upload:uploadEntities){
+                    uploadService.removeById(upload.getId());
+                }
+            }
+            businService.removeById(busin.getId());
+        }
+        return R.ok();
+    }
 
     @RequestMapping("/applyc/save")
     @RequiresPermissions("nfrecord:applyc:save")
