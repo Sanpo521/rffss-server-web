@@ -10,6 +10,8 @@ import io.renren.modules.rffss.entity.CodeOrganEntity;
 import io.renren.modules.rffss.entity.NfBusinEntity;
 import io.renren.modules.rffss.service.CodeOrganService;
 import io.renren.modules.rffss.service.NfBusinService;
+import io.renren.modules.sys.entity.SysUserEntity;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +27,17 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
 
     @Override
     public NfBusinEntity queryByRffsspid(String rffsspid){
-        return baseMapper.queryByRffsspid(rffsspid);
+        List<NfBusinEntity> list = baseMapper.queryByRffsspid(rffsspid);
+        NfBusinEntity businEntity = null;
+        if (null != list && list.size() > 0){
+            businEntity = list.get(0);
+        }
+        return businEntity;
     }
 
     @Override
     public PageUtils queryPageEx(Map<String, Object> params) {
+        String orgCode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
         Page<NfBusinEntity> pageParam = new Page<>(Long.parseLong(params.get("page").toString()), Long.parseLong(params.get("limit").toString()));
         List<String> btype=new ArrayList<>();
         if (params.containsKey("btype")){
@@ -51,10 +59,11 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
         if (params.containsKey("status")){
             status=params.get("status").toString();
         }
-        return new PageUtils(baseMapper.queryPageEx(pageParam,btype,issueorg,status,key));
+        return new PageUtils(baseMapper.queryPageEx(pageParam, btype, issueorg, status, key, orgCode));
     }
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String orgCode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
         Page<NfBusinEntity> pageParam = new Page<>(Long.parseLong(params.get("page").toString()), Long.parseLong(params.get("limit").toString()));
         List<String> btype=new ArrayList<>();
         if (params.containsKey("btype")){
@@ -88,7 +97,7 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
         if (params.containsKey("storageEntName")) {
             storageEntName = params.get("storageEntName").toString();
         }
-        return new PageUtils(baseMapper.queryPage(pageParam,btype,issueorg,status,createTime, applyName, recNum, storageEntName));
+        return new PageUtils(baseMapper.queryPage(pageParam,btype,issueorg,status,createTime, applyName, recNum, storageEntName, orgCode));
     }
 
     @Override

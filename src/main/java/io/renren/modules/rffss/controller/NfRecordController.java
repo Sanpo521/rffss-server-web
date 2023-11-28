@@ -527,7 +527,9 @@ public class NfRecordController {
         NfRffsspEntity rffssp = rffsspService.getById(busin.getRffsspid());
         if (null != rffssp.getIssueorg()){
             CodeOrganEntity codeOrgan = codeOrganService.getByCode(rffssp.getIssueorg());
-            rffssp.setOrgname(codeOrgan.getName());
+            if (null != codeOrgan){
+                rffssp.setOrgname(codeOrgan.getName());
+            }
         }
         record.setRffssp(rffssp);
         NfAgentEntity agent = agentService.getByBusinid(busin.getId());
@@ -552,7 +554,9 @@ public class NfRecordController {
         NfRffsspEntity rffssp = rffsspService.getById(busin.getRffsspid());
         if (null != rffssp.getIssueorg()){
             CodeOrganEntity codeOrgan = codeOrganService.getByCode(rffssp.getIssueorg());
-            rffssp.setOrgname(codeOrgan.getName());
+            if (null != codeOrgan){
+                rffssp.setOrgname(codeOrgan.getName());
+            }
         }
         record.setRffssp(rffssp);
         NfAgentEntity agent = agentService.getByBusinid(busin.getId());

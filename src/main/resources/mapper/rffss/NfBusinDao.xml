@@ -14,7 +14,7 @@
     </resultMap>
 
     <select id="queryByRffsspid" resultMap="nfBusinMap">
-        select b.*  from nf_busin b where b.rffsspid=#{rffsspid}
+        select b.*  from nf_busin b where b.rffsspid=#{rffsspid} order by lasttime desc
     </select>
 
         <select id="queryPageIsUserId" resultMap="nfBusinMap">
@@ -31,6 +31,9 @@
         and b.id not in (select rffsspid from nf_busin where b.status != 22)
         <if test="key !=null">
             and r.storage_name like CONCAT(CONCAT('%',#{key}),'%')
+        </if>
+        <if test="orgCode !=null and orgCode!=''">
+            and r.issueorg=#{orgCode}
         </if>
         order by b.lasttime desc
     </select>
@@ -54,7 +57,7 @@
                     </foreach>
                 </if>
                 <if test="createTime !=null and createTime!=''">
-                    and TO_DAYS(b.rec_time)=TO_DAYS(#{createTime})
+                    and TO_DAYS(r.rec_time)=TO_DAYS(#{createTime})
                 </if>
                 <if test="applyName !=null and applyName!=''">
                     and r.apply_name like CONCAT(CONCAT('%',#{applyName}),'%')
@@ -64,6 +67,9 @@
                 </if>
                 <if test="storageEntName !=null and storageEntName!=''">
                     and r.storage_ent_name like CONCAT(CONCAT('%',#{storageEntName}),'%')
+                </if>
+                <if test="orgCode !=null and orgCode!=''">
+                    and r.issueorg=#{orgCode}
                 </if>
             </trim>
           order by b.lasttime desc
@@ -173,10 +179,10 @@
                 and r.storage_rmount = #{storageAmount}
             </if>
             <if test="recTimeBegin !=null and recTimeBegin!=''">
-                and TO_DAYS(b.rec_time)&gt;=TO_DAYS(#{recTimeBegin})
+                and TO_DAYS(r.rec_time)&gt;=TO_DAYS(#{recTimeBegin})
             </if>
             <if test="recTimeEnd !=null and recTimeEnd!=''">
-                and TO_DAYS(b.rec_time)&lt;=TO_DAYS(#{recTimeEnd})
+                and TO_DAYS(r.rec_time)&lt;=TO_DAYS(#{recTimeEnd})
             </if>
             <if test="storageProvince !=null and storageProvince!=''">
                 and r.storage_province=#{storageProvince}
@@ -217,34 +223,34 @@
                 </foreach>
             </if>
             <if test="issueorg != null and issueorg.size() > 0">
-                and r.issueorg in
+                and n.issueorg in
                 <foreach collection="issueorg" index="idx" item="b" separator="," open="(" close=")">
                     #{b}
                 </foreach>
             </if>
             <if test="recNum !=null and recNum!=''">
-                and r.rec_num like CONCAT(CONCAT('%',#{recNum}),'%')
+                and n.rec_num like CONCAT(CONCAT('%',#{recNum}),'%')
             </if>
             <if test="storageEntName !=null and storageEntName!=''">
-                and r.storage_ent_name like CONCAT(CONCAT('%',#{storageEntName}),'%')
+                and n.storage_ent_name like CONCAT(CONCAT('%',#{storageEntName}),'%')
             </if>
             <if test="storageAmount !=null and storageAmount!=''">
-                and r.storage_rmount = #{storageAmount}
+                and n.storage_rmount = #{storageAmount}
             </if>
             <if test="recTimeBegin !=null and recTimeBegin!=''">
-                and TO_DAYS(b.rec_time)&gt;=TO_DAYS(#{recTimeBegin})
+                and TO_DAYS(n.rec_time)&gt;=TO_DAYS(#{recTimeBegin})
             </if>
             <if test="recTimeEnd !=null and recTimeEnd!=''">
-                and TO_DAYS(b.rec_time)&lt;=TO_DAYS(#{recTimeEnd})
+                and TO_DAYS(n.rec_time)&lt;=TO_DAYS(#{recTimeEnd})
             </if>
             <if test="storageProvince !=null and storageProvince!=''">
-                and r.storage_province=#{storageProvince}
+                and n.storage_province=#{storageProvince}
             </if>
             <if test="storageCity !=null and storageCity!=''">
-                and r.storage_city=#{storageCity}
+                and n.storage_city=#{storageCity}
             </if>
             <if test="storageCounty !=null and storageCounty!=''">
-                and r.storage_county=#{storageCounty}
+                and n.storage_county=#{storageCounty}
             </if>
         </trim>
         order by b.lasttime desc

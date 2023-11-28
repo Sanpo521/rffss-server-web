@@ -19,7 +19,7 @@ import java.util.Map;
 @Mapper
 public interface NfBusinDao extends BaseMapper<NfBusinEntity> {
 
-    NfBusinEntity queryByRffsspid(@Param("rffsspid")String rffsspid);
+    List<NfBusinEntity> queryByRffsspid(@Param("rffsspid")String rffsspid);
 
     Page<NfBusinEntity> queryPageIsUserId(Page<NfBusinEntity> pageParam ,@Param("userId")Long userId);
 
@@ -27,7 +27,8 @@ public interface NfBusinDao extends BaseMapper<NfBusinEntity> {
                                     @Param("btype")List<String> btype,
                                     @Param("issueorg")List<String> issueorg,
                                     @Param("status")String status,
-                                    @Param("key") String key);
+                                    @Param("key") String key,
+                                    @Param("orgCode") String orgCode);
 
     Page<NfBusinEntity> queryPage(Page<NfBusinEntity> pageParam ,
                                   @Param("btype")List<String> btype,
@@ -36,7 +37,8 @@ public interface NfBusinDao extends BaseMapper<NfBusinEntity> {
                                   @Param("createTime") String createTime,
                                   @Param("applyName") String applyName,
                                   @Param("recNum") String recNum,
-                                  @Param("storageEntName") String storageEntName);
+                                  @Param("storageEntName") String storageEntName,
+                                  @Param("orgCode") String orgCode);
 
     Page<NfBusinEntity> queryPageByStatisticsExList(Page<NfBusinEntity> pageParam ,
                                                     @Param("btype")List<String> btype,
