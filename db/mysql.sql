@@ -768,6 +768,7 @@ INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `p
 INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (402, 400, '备案查询', 'nfrecord/statistics', 'nfrecord:statistics:list', 1, NULL, 2);
 INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (403, 400, '入库统计', 'nfrecord/inbound', 'nfrecord:inbound:list', 1, NULL, 3);
 INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (404, 400, '风险警告', 'nfrecord/warn', 'nfrecord:warn:list', 1, NULL, 4);
+INSERT INTO `nf_samr_rffss`.`sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (402, 400, '查询统计', 'nfrecord/statisticsex', 'nfrecord:statisticsex:list', 1, NULL, 5);
 
 
 SET NAMES utf8mb4;
@@ -883,3 +884,10 @@ CREATE TABLE `nf_upload_history`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1711553728637476867 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+ALTER TABLE `nf_rffssp` ADD COLUMN `storage_amount` varchar(20) NULL COMMENT '冷库数量' AFTER `storage_power_cubic_meter`;
+
+ALTER TABLE `nf_rffssp_history` ADD COLUMN `storage_amount` varchar(20) NULL COMMENT '冷库数量' AFTER `storage_power_cubic_meter`;
+
+
+INSERT INTO `sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (406, 400, '查询统计', 'nfrecord/statisticsex', 'nfrecord:statisticsex:list', 1, NULL, 5);

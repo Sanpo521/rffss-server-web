@@ -177,6 +177,107 @@ public class NfRecordController {
         params.put("status", RffssConstant.BUSIN_STATUS_CHECK);
         return list(params);
     }
+    @RequestMapping("/statisticsex/list")
+    @RequiresPermissions("nfrecord:statisticsex:list")
+    public R statisticsExList(@RequestParam Map<String, Object> params){
+        if (params.containsKey("btype")){
+            String[] b=params.get("btype").toString().split(",");
+            if(b!=null && b.length>0){
+                List<String> btypes =  Arrays.asList(b);
+                params.put("btype", btypes);
+            }
+        }
+        params.put("status", RffssConstant.BUSIN_STATUS_CHECK);
+        return listByStatisticsExList(params);
+    }
+
+    private R listByStatisticsExList( Map<String, Object> params){
+        PageUtils businPage = businService.queryPageByStatisticsExList(params);
+        return listOpt(params, businPage);
+    }
+
+    @RequestMapping({"/statisticsex/listExcel"})
+    public void listExcelByStatisticsExList(@RequestParam Map<String, Object> params, HttpServletResponse response) {
+        if (params.containsKey("btype")) {
+            String[] b = params.get("btype").toString().split(",");
+            if (b != null && b.length > 0) {
+                List<String> btypes = Arrays.asList(b);
+                params.put("btype", btypes);
+            }
+        }
+        params.put("status", "22");
+        List<Map<String, Object>> mapList = this.businService.listExcelByStatisticsExList(params);
+        if (CollectionUtils.isNotEmpty(mapList)) {
+            List<String> columnList = new ArrayList();
+            columnList.add("序号");
+            columnList.add("业务类型");
+            columnList.add("经营者名称");
+            columnList.add("备案号");
+            columnList.add("冷库数");
+            columnList.add("备案日期");
+            columnList.add("登记机构");
+            columnList.add("行政区划");
+            List<List<String>> collect = (List)mapList.stream().map((item) -> {
+                List<String> str = new ArrayList();
+                String sheng = item.get("sheng") != null ? item.get("sheng").toString() : "";
+                String shi = item.get("shi") != null ? item.get("shi").toString() : "";
+                String xian = item.get("xian") != null ? item.get("xian").toString() : "";
+                str.add(item.get("typename") != null ? item.get("typename").toString() : "");
+                str.add(item.get("storage_ent_name") != null ? item.get("storage_ent_name").toString() : "");
+                str.add(item.get("rec_num") != null ? item.get("rec_num").toString() : "");
+                str.add(item.get("storage_amount") != null ? item.get("storage_amount").toString() : "");
+                str.add(item.get("rec_time") != null ? item.get("rec_time").toString() : "");
+                str.add(item.get("orgname") != null ? item.get("orgname").toString() : "");
+                str.add(sheng + shi + xian);
+                return str;
+            }).collect(Collectors.toList());
+            ExcelUtil.uploadExcelAboutUser(response, "统计.xls", columnList, collect);
+        }
+    }
+
+    @RequestMapping({"/statisticsex/excel"})
+    public void excelByStatisticsExList(@RequestParam(required = true) String id, HttpServletResponse response) {
+        List<Map<String, Object>> mapList = this.businService.excel(id);
+        if (CollectionUtils.isNotEmpty(mapList)) {
+            List<String> columnList = new ArrayList();
+            columnList.add("序号");
+            columnList.add("办理备案日期");
+            columnList.add("统一社会信用代码");
+            columnList.add("从事冷藏冷冻食品贮存业务的非食品生产经营者名称");
+            columnList.add("法定代表人（负责人）");
+            columnList.add("联系人");
+            columnList.add("联系电话");
+            columnList.add("冷藏冷冻库名称");
+            columnList.add("冷藏冷冻库地址（省）");
+            columnList.add("冷藏冷冻库地址（市）");
+            columnList.add("冷藏冷冻库地址（区/县）");
+            columnList.add("冷藏冷冻库详细地址");
+            columnList.add("贮存能力（单位：吨）");
+            columnList.add("贮存能力（单位：立方米）");
+            columnList.add("备案编号");
+            columnList.add("备案日期");
+            List<List<String>> collect = (List)mapList.stream().map((item) -> {
+                List<String> str = new ArrayList();
+                str.add(item.get("apply_time") != null ? item.get("apply_time").toString() : "");
+                str.add(item.get("unisc_id") != null ? item.get("unisc_id").toString() : "");
+                str.add(item.get("storage_ent_name") != null ? item.get("storage_ent_name").toString() : "");
+                str.add(item.get("le_rep") != null ? item.get("le_rep").toString() : "");
+                str.add(item.get("contract_name") != null ? item.get("contract_name").toString() : "");
+                str.add(item.get("contract_tel") != null ? item.get("contract_tel").toString() : "");
+                str.add(item.get("storage_name") != null ? item.get("storage_name").toString() : "");
+                str.add(item.get("storageprovname") != null ? item.get("storageprovname").toString() : "");
+                str.add(item.get("storagecityname") != null ? item.get("storagecityname").toString() : "");
+                str.add(item.get("storagecountyname") != null ? item.get("storagecountyname").toString() : "");
+                str.add(item.get("storage_address") != null ? item.get("storage_address").toString() : "");
+                str.add(item.get("storage_power_ton") != null ? item.get("storage_power_ton").toString() : "");
+                str.add(item.get("storage_power_cubic_meter") != null ? item.get("storage_power_cubic_meter").toString() : "");
+                str.add(item.get("rec_num") != null ? item.get("rec_num").toString() : "");
+                str.add(item.get("rec_time") != null ? item.get("rec_time").toString() : "");
+                return str;
+            }).collect(Collectors.toList());
+            ExcelUtil.uploadExcelAboutUser(response, id+".xls", columnList, collect);
+        }
+    }
 
     /**
      * 根据行政机关查询备案申请
@@ -197,22 +298,18 @@ public class NfRecordController {
         return list(params);
     }
 
-
     @RequestMapping({"/statistics/listExcel"})
     public void listExcel(@RequestParam(required = false) String btype, @RequestParam(required = false) String issueorg, @RequestParam(required = false) String createTime, HttpServletResponse response) {
         Map<String, Object> params = new HashMap();
         if (StringUtils.isNotEmpty(btype)) {
             params.put("btype", btype);
         }
-
         if (StringUtils.isNotEmpty(issueorg)) {
             params.put("issueorg", issueorg);
         }
-
         if (StringUtils.isNotEmpty(createTime)) {
             params.put("createTime", createTime);
         }
-
         if (params.containsKey("btype")) {
             String[] b = params.get("btype").toString().split(",");
             if (b != null && b.length > 0) {
@@ -220,11 +317,11 @@ public class NfRecordController {
                 params.put("btype", btypes);
             }
         }
-
         params.put("status", "22");
         List<Map<String, Object>> mapList = this.businService.listExcel(params);
         if (CollectionUtils.isNotEmpty(mapList)) {
             List<String> columnList = new ArrayList();
+            columnList.add("序号");
             columnList.add("县（市、区）");
             columnList.add("备案号");
             columnList.add("提供者名称");
@@ -238,7 +335,7 @@ public class NfRecordController {
                 str.add(sheng + shi + xian);
                 str.add(item.get("rec_num") != null ? item.get("rec_num").toString() : "");
                 str.add(item.get("apply_name") != null ? item.get("apply_name").toString() : "");
-                str.add(item.get("equipment_name_specification") != null ? item.get("equipment_name_specification").toString() : "");
+                str.add(item.get("storage_amount") != null ? item.get("storage_amount").toString() : "");
                 str.add(item.get("remarks") != null ? item.get("remarks").toString() : "");
                 return str;
             }).collect(Collectors.toList());
@@ -246,6 +343,7 @@ public class NfRecordController {
         }
 
     }
+
     /**
      * 各地市入库数量统计
      * @param typesOf

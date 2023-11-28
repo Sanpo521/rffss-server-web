@@ -73,7 +73,9 @@ public class OAuth2Filter extends AuthenticatingFilter {
 
         ///临时token处理方法
         if(StringUtils.contains(requestURI,"qy/gyupload/info")
-        || StringUtils.contains(requestURI,"statistics/listExcel")
+                || StringUtils.contains(requestURI,"statistics/listExcel")
+                || StringUtils.contains(requestURI,"statisticsex/listExcel")
+                || StringUtils.contains(requestURI,"statisticsex/excel")
         ){
             return true;
         }

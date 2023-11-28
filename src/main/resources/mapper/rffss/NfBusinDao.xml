@@ -36,8 +36,7 @@
     </select>
 
         <select id="queryPage" resultMap="nfBusinMap">
-            select b.*  from nf_busin b
-            left join nf_rffssp r on r.id=b.rffsspid
+            select b.* from nf_rffssp r left join nf_busin b on r.id=b.rffsspid
             <trim prefix="WHERE" prefixOverrides="AND | OR" >
                 <if test="status !=null">
                     and b.status = #{status}
@@ -55,7 +54,16 @@
                     </foreach>
                 </if>
                 <if test="createTime !=null and createTime!=''">
-                    and TO_DAYS(b.createtime)=TO_DAYS(#{createTime})
+                    and TO_DAYS(b.rec_time)=TO_DAYS(#{createTime})
+                </if>
+                <if test="applyName !=null and applyName!=''">
+                    and r.apply_name like CONCAT(CONCAT('%',#{applyName}),'%')
+                </if>
+                <if test="recNum !=null and recNum!=''">
+                    and r.rec_num like CONCAT(CONCAT('%',#{recNum}),'%')
+                </if>
+                <if test="storageEntName !=null and storageEntName!=''">
+                    and r.storage_ent_name like CONCAT(CONCAT('%',#{storageEntName}),'%')
                 </if>
             </trim>
           order by b.lasttime desc
@@ -106,10 +114,8 @@
         having (ru=0 or chu=0)
     </select>
 
-
-
     <select id="listExcel" resultType="Map">
-        select n.storage_name, n.rec_num, n.remarks,n.equipment_name_specification,n.apply_name,sheng.name as sheng,shi.name as shi ,xian. name  as xian
+        select n.storage_name, n.rec_num, n.storage_amount, n.remarks,n.equipment_name_specification,n.apply_name,sheng.name as sheng,shi.name as shi ,xian. name  as xian
         from  nf_rffssp  n
         LEFT JOIN code_addiv as sheng on n.storage_province=sheng.code
         LEFT JOIN code_addiv as shi on n.storage_city=shi.code
@@ -131,10 +137,131 @@
                     #{b}
                 </foreach>
             </if>
-            <if test="createTime !=null and createTime!=''">
-                and TO_DAYS(b.createtime)=TO_DAYS(#{createTime})
+            <if test="recTime !=null and recTime!=''">
+                and TO_DAYS(n.rec_time)=TO_DAYS(#{recTime})
             </if>
         </trim>
+        order by b.lasttime desc
+    </select>
+
+    <select id="queryPageByStatisticsExList" resultMap="nfBusinMap">
+        select b.*  from nf_busin b
+        left join nf_rffssp r on r.id=b.rffsspid
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="status !=null">
+                and b.status = #{status}
+            </if>
+            <if test="btype != null and btype.size() > 0">
+                and b.btype in
+                <foreach collection="btype" index="idx" item="a" separator="," open="(" close=")">
+                    #{a}
+                </foreach>
+            </if>
+            <if test="issueorg != null and issueorg.size() > 0">
+                and r.issueorg in
+                <foreach collection="issueorg" index="idx" item="b" separator="," open="(" close=")">
+                    #{b}
+                </foreach>
+            </if>
+            <if test="recNum !=null and recNum!=''">
+                and r.rec_num like CONCAT(CONCAT('%',#{recNum}),'%')
+            </if>
+            <if test="storageEntName !=null and storageEntName!=''">
+                and r.storage_ent_name like CONCAT(CONCAT('%',#{storageEntName}),'%')
+            </if>
+            <if test="storageAmount !=null and storageAmount!=''">
+                and r.storage_rmount = #{storageAmount}
+            </if>
+            <if test="recTimeBegin !=null and recTimeBegin!=''">
+                and TO_DAYS(b.rec_time)&gt;=TO_DAYS(#{recTimeBegin})
+            </if>
+            <if test="recTimeEnd !=null and recTimeEnd!=''">
+                and TO_DAYS(b.rec_time)&lt;=TO_DAYS(#{recTimeEnd})
+            </if>
+            <if test="storageProvince !=null and storageProvince!=''">
+                and r.storage_province=#{storageProvince}
+            </if>
+            <if test="storageCity !=null and storageCity!=''">
+                and r.storage_city=#{storageCity}
+            </if>
+            <if test="storageCounty !=null and storageCounty!=''">
+                and r.storage_county=#{storageCounty}
+            </if>
+        </trim>
+        order by b.lasttime desc
+    </select>
+
+    <select id="listExcelByStatisticsExList" resultType="Map">
+        select (case when b.btype=10 then '备案'
+        when b.btype=11 then '变更'
+        when b.btype=12 then '注销'
+        when b.btype=20 then '备案'
+        when b.btype=21 then '变更'
+        when b.btype=22 then '注销'
+        else '' end) as typename, n.storage_ent_name, n.rec_num, n.storage_amount, n.rec_time,
+        n.issueorg, org.name as orgname, sheng.name as sheng, shi.name as shi ,xian. name  as xian
+        from  nf_rffssp  n
+        LEFT JOIN code_addiv as sheng on n.storage_province=sheng.code
+        LEFT JOIN code_addiv as shi on n.storage_city=shi.code
+        LEFT JOIN code_addiv as  xian on n.storage_county=xian.code
+        LEFT JOIN code_organ as  org on n.issueorg=org.code
+        LEFT JOIN nf_busin as b  on b.rffsspid=n.id
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="status !=null">
+                and b.status = #{status}
+            </if>
+            <if test="btype != null and btype.size() > 0">
+                and b.btype in
+                <foreach collection="btype" index="idx" item="a" separator="," open="(" close=")">
+                    #{a}
+                </foreach>
+            </if>
+            <if test="issueorg != null and issueorg.size() > 0">
+                and r.issueorg in
+                <foreach collection="issueorg" index="idx" item="b" separator="," open="(" close=")">
+                    #{b}
+                </foreach>
+            </if>
+            <if test="recNum !=null and recNum!=''">
+                and r.rec_num like CONCAT(CONCAT('%',#{recNum}),'%')
+            </if>
+            <if test="storageEntName !=null and storageEntName!=''">
+                and r.storage_ent_name like CONCAT(CONCAT('%',#{storageEntName}),'%')
+            </if>
+            <if test="storageAmount !=null and storageAmount!=''">
+                and r.storage_rmount = #{storageAmount}
+            </if>
+            <if test="recTimeBegin !=null and recTimeBegin!=''">
+                and TO_DAYS(b.rec_time)&gt;=TO_DAYS(#{recTimeBegin})
+            </if>
+            <if test="recTimeEnd !=null and recTimeEnd!=''">
+                and TO_DAYS(b.rec_time)&lt;=TO_DAYS(#{recTimeEnd})
+            </if>
+            <if test="storageProvince !=null and storageProvince!=''">
+                and r.storage_province=#{storageProvince}
+            </if>
+            <if test="storageCity !=null and storageCity!=''">
+                and r.storage_city=#{storageCity}
+            </if>
+            <if test="storageCounty !=null and storageCounty!=''">
+                and r.storage_county=#{storageCounty}
+            </if>
+        </trim>
+        order by b.lasttime desc
+    </select>
+
+    <select id="excel" resultType="Map">
+        select r.apply_time, r.unisc_id, r.storage_ent_name, r.le_rep, r.contract_name, r.contract_tel, r.storage_name,
+               sheng.name as storageprovname, shi.name as storagecityname ,xian. name  as storagecountyname,
+               r.storage_address, r.storage_power_ton, r.storage_power_cubic_meter, r.rec_num, r.rec_time
+        from  nf_rffssp  r
+        LEFT JOIN code_addiv as sheng on r.storage_province=sheng.code
+        LEFT JOIN code_addiv as shi on r.storage_city=shi.code
+        LEFT JOIN code_addiv as  xian on r.storage_county=xian.code
+        LEFT JOIN nf_busin as b  on b.rffsspid=r.id where b.status = 22
+            <if test="id !=null and id!=''">
+                and b.id=#{id}
+            </if>
         order by b.lasttime desc
     </select>
 </mapper>

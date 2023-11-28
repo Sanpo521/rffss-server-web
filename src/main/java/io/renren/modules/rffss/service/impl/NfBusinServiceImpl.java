@@ -1,5 +1,6 @@
 package io.renren.modules.rffss.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -39,7 +40,7 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
             key=params.get("key").toString();
         }
         List<String> issueorg=new ArrayList<>();
-        if (params.containsKey("issueorg")){
+        if (params.containsKey("issueorg") && StrUtil.isNotBlank(params.get("issueorg").toString())){
             CodeOrganEntity codeOrgan = codeOrganService.getById(params.get("issueorg").toString());
             if(codeOrgan!=null){
                 issueorg.add(codeOrgan.getCode());
@@ -60,7 +61,7 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
            btype=(List)params.get("btype");
         }
         List<String> issueorg=new ArrayList<>();
-        if (params.containsKey("issueorg")){
+        if (params.containsKey("issueorg") && StrUtil.isNotBlank(params.get("issueorg").toString())){
             CodeOrganEntity codeOrgan = codeOrganService.getById(params.get("issueorg").toString());
             if(codeOrgan!=null){
                 issueorg.add(codeOrgan.getCode());
@@ -75,7 +76,76 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
         if (params.containsKey("createTime")) {
             createTime = params.get("createTime").toString();
         }
-        return new PageUtils(baseMapper.queryPage(pageParam,btype,issueorg,status,createTime));
+        String applyName = "";
+        if (params.containsKey("applyName")) {
+            applyName = params.get("applyName").toString();
+        }
+        String recNum = "";
+        if (params.containsKey("recNum")) {
+            recNum = params.get("recNum").toString();
+        }
+        String storageEntName = "";
+        if (params.containsKey("storageEntName")) {
+            storageEntName = params.get("storageEntName").toString();
+        }
+        return new PageUtils(baseMapper.queryPage(pageParam,btype,issueorg,status,createTime, applyName, recNum, storageEntName));
+    }
+
+    @Override
+    public PageUtils queryPageByStatisticsExList(Map<String, Object> params) {
+        Page<NfBusinEntity> pageParam = new Page<>(Long.parseLong(params.get("page").toString()), Long.parseLong(params.get("limit").toString()));
+        List<String> btype=new ArrayList<>();
+        if (params.containsKey("btype")){
+            btype=(List)params.get("btype");
+        }
+        String storageEntName = "";
+        if (params.containsKey("storageEntName")) {
+            storageEntName = params.get("storageEntName").toString();
+        }
+        String recNum = "";
+        if (params.containsKey("recNum")) {
+            recNum = params.get("recNum").toString();
+        }
+        String storageAmount = "";
+        if (params.containsKey("storageAmount")) {
+            storageAmount = params.get("storageAmount").toString();
+        }
+        String recTimeBegin = "";
+        if (params.containsKey("recTimeBegin")) {
+            recTimeBegin = params.get("recTimeBegin").toString();
+        }
+        String recTimeEnd = "";
+        if (params.containsKey("recTimeEnd")) {
+            recTimeEnd = params.get("recTimeEnd").toString();
+        }
+        List<String> issueorg=new ArrayList<>();
+        if (params.containsKey("issueorg") && StrUtil.isNotBlank(params.get("issueorg").toString())){
+            CodeOrganEntity codeOrgan = codeOrganService.getById(params.get("issueorg").toString());
+            if(codeOrgan!=null){
+                issueorg.add(codeOrgan.getCode());
+            }
+            issueorg= getCode(issueorg,codeOrgan.getCode(),codeOrganService);
+        }
+        String storageProvince="";
+        String storageCity="";
+        String storageCounty="";
+        if (params.containsKey("storageCounty") && params.get("storageCounty").toString().endsWith("0000")){
+            storageProvince=params.get("storageCounty").toString();
+        }else{
+            if (params.containsKey("storageCounty")&& params.get("storageCounty").toString().endsWith("00")){
+                storageCity=params.get("storageCounty").toString();
+            }else{
+                if (params.containsKey("storageCounty")){
+                    storageCounty=params.get("storageCounty").toString();
+                }
+            }
+        }
+        String status="";
+        if (params.containsKey("status")){
+            status=params.get("status").toString();
+        }
+        return new PageUtils(baseMapper.queryPageByStatisticsExList(pageParam, btype, storageEntName,
+                recNum, storageAmount, recTimeBegin, recTimeEnd, issueorg, storageProvince, storageCity, storageCounty, status));
     }
 
     /**
@@ -121,9 +191,8 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
         if (params.containsKey("btype")){
             btype=(List)params.get("btype");
         }
-
         List<String> issueorg=new ArrayList<>();
-        if (params.containsKey("issueorg")){
+        if (params.containsKey("issueorg") && StrUtil.isNotBlank(params.get("issueorg").toString())){
             CodeOrganEntity codeOrgan = codeOrganService.getById(params.get("issueorg").toString());
             if(codeOrgan!=null){
                 issueorg.add(codeOrgan.getCode());
@@ -135,11 +204,72 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
             status = params.get("status").toString();
         }
 
-        String createTime = "";
-        if (params.containsKey("createTime")) {
-            createTime = params.get("createTime").toString();
+        String recTime = "";
+        if (params.containsKey("recTime")) {
+            recTime = params.get("recTime").toString();
         }
 
-        return baseMapper.listExcel((List)btype, (List)issueorg, status, createTime);
+        return baseMapper.listExcel((List)btype, (List)issueorg, status, recTime);
+    }
+
+    @Override
+    public List<Map<String, Object>> listExcelByStatisticsExList(Map<String, Object> params) {
+        List<String> btype=new ArrayList<>();
+        if (params.containsKey("btype")){
+            btype=(List)params.get("btype");
+        }
+        String storageEntName = "";
+        if (params.containsKey("storageEntName")) {
+            storageEntName = params.get("storageEntName").toString();
+        }
+        String recNum = "";
+        if (params.containsKey("recNum")) {
+            recNum = params.get("recNum").toString();
+        }
+        String storageAmount = "";
+        if (params.containsKey("storageAmount")) {
+            storageAmount = params.get("storageAmount").toString();
+        }
+        String recTimeBegin = "";
+        if (params.containsKey("recTimeBegin")) {
+            recTimeBegin = params.get("recTimeBegin").toString();
+        }
+        String recTimeEnd = "";
+        if (params.containsKey("recTimeEnd")) {
+            recTimeEnd = params.get("recTimeEnd").toString();
+        }
+        List<String> issueorg=new ArrayList<>();
+        if (params.containsKey("issueorg") && StrUtil.isNotBlank(params.get("issueorg").toString())){
+            CodeOrganEntity codeOrgan = codeOrganService.getById(params.get("issueorg").toString());
+            if(codeOrgan!=null){
+                issueorg.add(codeOrgan.getCode());
+            }
+            issueorg= getCode(issueorg,codeOrgan.getCode(),codeOrganService);
+        }
+        String storageProvince="";
+        String storageCity="";
+        String storageCounty="";
+        if (params.containsKey("storageCounty") && params.get("storageCounty").toString().endsWith("0000")){
+            storageProvince=params.get("storageCounty").toString();
+        }else{
+            if (params.containsKey("storageCounty")&& params.get("storageCounty").toString().endsWith("00")){
+                storageCity=params.get("storageCounty").toString();
+            }else{
+                if (params.containsKey("storageCounty")){
+                    storageCounty=params.get("storageCounty").toString();
+                }
+            }
+        }
+        String status="";
+        if (params.containsKey("status")){
+            status=params.get("status").toString();
+        }
+        return baseMapper.listExcelByStatisticsExList(btype, storageEntName, recNum, storageAmount,
+                recTimeBegin, recTimeEnd, issueorg, storageProvince, storageCity, storageCounty, status);
+    }
+
+    @Override
+    public List<Map<String, Object>> excel(String id) {
+        return baseMapper.excel(id);
     }
 }

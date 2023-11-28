@@ -128,6 +128,10 @@ public class NfRffsspEntity implements Serializable {
      */
     private String storagePowerCubicMeter;
     /**
+     * 冷库数量
+     */
+    private String storageAmount;
+    /**
      * 备案编号
      */
     private String recNum;

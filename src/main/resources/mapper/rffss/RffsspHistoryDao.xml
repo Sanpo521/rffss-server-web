@@ -30,6 +30,7 @@
         <result property="storageAddress" column="storage_address"/>
         <result property="storagePowerTon" column="storage_power_ton"/>
         <result property="storagePowerCubicMeter" column="storage_power_cubic_meter"/>
+        <result property="storageAmount" column="storage_amount"/>
         <result property="recNum" column="rec_num"/>
         <result property="recTime" column="rec_time"/>
         <result property="entryTime" column="entry_time"/>

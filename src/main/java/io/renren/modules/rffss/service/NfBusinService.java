@@ -22,6 +22,8 @@ public interface NfBusinService extends IService<NfBusinEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    PageUtils queryPageByStatisticsExList(Map<String, Object> params);
+
     PageUtils queryPageIsUserId(Map<String, Object> params,Long userId);
 
     List<Map<String,Object>> getAddressCodeInbound(String typesOf,String startDate,String endDate,String type);
@@ -29,5 +31,9 @@ public interface NfBusinService extends IService<NfBusinEntity> {
     PageUtils queryWarnInbound(Long page,Long limit,String date);
 
     List<Map<String, Object>> listExcel(Map<String, Object> params);
+
+    List<Map<String, Object>> listExcelByStatisticsExList(Map<String, Object> params);
+
+    List<Map<String, Object>> excel(String id);
 }
 
