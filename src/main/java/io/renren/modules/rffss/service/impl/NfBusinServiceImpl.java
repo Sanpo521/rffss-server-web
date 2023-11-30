@@ -38,6 +38,16 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
     @Override
     public PageUtils queryPageEx(Map<String, Object> params) {
         String orgCode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+        if (null == orgCode){
+            orgCode = "230000";
+        }
+        if (orgCode.endsWith("0000")){
+            orgCode=orgCode.substring(0, 2);
+        }else{
+            if (orgCode.endsWith("00")){
+                orgCode=orgCode.substring(0, 4);
+            }
+        }
         Page<NfBusinEntity> pageParam = new Page<>(Long.parseLong(params.get("page").toString()), Long.parseLong(params.get("limit").toString()));
         List<String> btype=new ArrayList<>();
         if (params.containsKey("btype")){
@@ -64,6 +74,16 @@ public class NfBusinServiceImpl extends ServiceImpl<NfBusinDao, NfBusinEntity> i
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         String orgCode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+        if (null == orgCode){
+            orgCode = "230000";
+        }
+        if (orgCode.endsWith("0000")){
+            orgCode=orgCode.substring(0, 2);
+        }else{
+            if (orgCode.endsWith("00")){
+                orgCode=orgCode.substring(0, 4);
+            }
+        }
         Page<NfBusinEntity> pageParam = new Page<>(Long.parseLong(params.get("page").toString()), Long.parseLong(params.get("limit").toString()));
         List<String> btype=new ArrayList<>();
         if (params.containsKey("btype")){

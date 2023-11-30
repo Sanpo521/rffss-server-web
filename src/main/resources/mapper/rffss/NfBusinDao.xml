@@ -33,7 +33,7 @@
             and r.storage_name like CONCAT(CONCAT('%',#{key}),'%')
         </if>
         <if test="orgCode !=null and orgCode!=''">
-            and r.issueorg=#{orgCode}
+            and r.issueorg like CONCAT(#{orgCode},'%')
         </if>
         order by b.lasttime desc
     </select>
@@ -69,7 +69,7 @@
                     and r.storage_ent_name like CONCAT(CONCAT('%',#{storageEntName}),'%')
                 </if>
                 <if test="orgCode !=null and orgCode!=''">
-                    and r.issueorg=#{orgCode}
+                    and r.issueorg like CONCAT(#{orgCode},'%')
                 </if>
             </trim>
           order by b.lasttime desc

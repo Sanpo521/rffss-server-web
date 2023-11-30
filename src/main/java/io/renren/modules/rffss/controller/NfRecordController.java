@@ -963,7 +963,15 @@ public class NfRecordController {
 
         NfCheckedEntity accept = record.getAccept();
         if (null != accept && StringUtils.isNotEmpty(accept.getName())){
-//            accept.setId(accept.getId()==0L?null:accept.getId());
+            if (StringUtils.isNotEmpty(accept.getId())){
+                try{
+                    if (0==Integer.parseInt(accept.getId())){
+                        accept.setId(RffssConstant.ID_PREFIX_IN+IdWorker.getIdStr());
+                    }
+                }catch (Exception e){
+
+                }
+            }
             if (!StringUtils.isNotEmpty(accept.getId())){
                 accept.setId(RffssConstant.ID_PREFIX_IN+IdWorker.getIdStr());
             }
@@ -982,7 +990,15 @@ public class NfRecordController {
 
         NfCheckedEntity checked = record.getChecked();
         if (null != checked && StringUtils.isNotEmpty(checked.getName())){
-//            checked.setId(checked.getId()==0L?null:checked.getId());
+            if (StringUtils.isNotEmpty(checked.getId())){
+                try{
+                    if (0==Integer.parseInt(checked.getId())){
+                        checked.setId(RffssConstant.ID_PREFIX_IN+IdWorker.getIdStr());
+                    }
+                }catch (Exception e){
+
+                }
+            }
             if (!StringUtils.isNotEmpty(checked.getId())){
                 checked.setId(RffssConstant.ID_PREFIX_IN+IdWorker.getIdStr());
             }

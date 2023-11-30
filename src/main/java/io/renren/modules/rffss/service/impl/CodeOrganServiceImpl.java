@@ -68,6 +68,14 @@ public class CodeOrganServiceImpl extends ServiceImpl<CodeOrganDao, CodeOrganEnt
 
     @Override
     public JSONArray queryTreeEx(String code){
+        try{
+            String orgCode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+            if (null != orgCode){
+                code = orgCode;
+            }
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
         JSONArray ja =  new JSONArray();
         CodeOrganEntity codeOrganCur = getByCode(code);
         JSONArray jaa = queryTree(code);
