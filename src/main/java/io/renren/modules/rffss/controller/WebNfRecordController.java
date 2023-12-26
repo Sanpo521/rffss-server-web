@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
+import io.renren.common.utils.StrUtils;
 import io.renren.config.RffssConfig;
 import io.renren.modules.rffss.RffssConstant;
 import io.renren.modules.rffss.entity.*;
@@ -232,6 +233,8 @@ public class WebNfRecordController {
             rffssp.setLasttime(new Date());
             rffssp.setStatus(rffssStatus);
             rffssp.setValid(1);
+            rffssp.setStoragePowerTon(StrUtils.strToTwoDecimal(rffssp.getStoragePowerTon()));
+            rffssp.setStoragePowerCubicMeter(StrUtils.strToTwoDecimal(rffssp.getStoragePowerCubicMeter()));
             rffsspService.saveOrUpdate(rffssp);
             Long userid = ((NfUserEntity) SecurityUtils.getSubject().getPrincipal()).getId();
             NfRffsspUserEntity rffsspUser = rffsspUserService.getByRffssidAndUserid(rffssp.getId(), userid);

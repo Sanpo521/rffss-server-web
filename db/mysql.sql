@@ -891,3 +891,9 @@ ALTER TABLE `nf_rffssp_history` ADD COLUMN `storage_amount` varchar(20) NULL COM
 
 
 INSERT INTO `sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (406, 400, '查询统计', 'nfrecord/statisticsex', 'nfrecord:statisticsex:list', 1, NULL, 5);
+
+
+--- 全省备案通过的
+select b. from nf_rffssp r left join nf_busin b on r.id=b.rffsspid
+WHERE b.status = 22 and b.btype in ( 10 , 11 , 12 , 20 , 21 , 22 )
+  and r.issueorg like '23%'

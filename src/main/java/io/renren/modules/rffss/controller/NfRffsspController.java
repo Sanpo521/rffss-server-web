@@ -2,6 +2,7 @@ package io.renren.modules.rffss.controller;
 
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
+import io.renren.common.utils.StrUtils;
 import io.renren.modules.rffss.entity.NfRffsspEntity;
 import io.renren.modules.rffss.service.NfRffsspService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class NfRffsspController {
      */
     @RequestMapping("/save")
     public R save(@RequestBody NfRffsspEntity nfRffssp){
+        nfRffssp.setStoragePowerTon(StrUtils.strToTwoDecimal(nfRffssp.getStoragePowerTon()));
+        nfRffssp.setStoragePowerCubicMeter(StrUtils.strToTwoDecimal(nfRffssp.getStoragePowerCubicMeter()));
 		nfRffsspService.save(nfRffssp);
 
         return R.ok();

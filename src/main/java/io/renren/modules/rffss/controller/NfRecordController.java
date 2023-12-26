@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import io.renren.common.utils.ExcelUtil;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
+import io.renren.common.utils.StrUtils;
 import io.renren.config.RffssConfig;
 import io.renren.modules.rffss.RffssConstant;
 import io.renren.modules.rffss.entity.*;
@@ -854,6 +855,8 @@ public class NfRecordController {
             rffssp.setLasttime(new Date());
             rffssp.setStatus(rffssStatus);
             rffssp.setValid(1);
+            rffssp.setStoragePowerTon(StrUtils.strToTwoDecimal(rffssp.getStoragePowerTon()));
+            rffssp.setStoragePowerCubicMeter(StrUtils.strToTwoDecimal(rffssp.getStoragePowerCubicMeter()));
             rffsspService.saveOrUpdate(rffssp);
         }
         NfBusinEntity busin = record.getBusin();
@@ -1012,6 +1015,8 @@ public class NfRecordController {
             busin.setStatus(checked.getCtype() + checked.getCresult());
             checkedService.saveOrUpdate(checked);
         }
+        rffssp.setStoragePowerTon(StrUtils.strToTwoDecimal(rffssp.getStoragePowerTon()));
+        rffssp.setStoragePowerCubicMeter(StrUtils.strToTwoDecimal(rffssp.getStoragePowerCubicMeter()));
         rffsspService.saveOrUpdate(rffssp);
         businService.saveOrUpdate(busin);
     }
