@@ -96,11 +96,11 @@ public class ThirdColdStorageInfoEntity implements Serializable {
 	/**
 	 * 贮存能力（单位：吨）
 	 */
-	private Integer storagepowerton;
+	private Double storagepowerton;
 	/**
 	 * 贮存能力（单位：立方米）
 	 */
-	private Integer storagepowercubicmeter;
+	private Double storagepowercubicmeter;
 	/**
 	 * 备案编号,按照冷藏冷冻库编号，一库一号
 	 */

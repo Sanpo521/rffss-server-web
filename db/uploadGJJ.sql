@@ -11,7 +11,9 @@ insert into infoshar_1458931363 (thirdcoldstorageinfoid, applytime, applyname, a
     ,proxyname
     ,proxycontactinfo
     ,receiver)
+values ();
 
+-- 查询上报数据
 select p.id, p.createtime, p.apply_name, p.apply_contact_info, p.storage_ent_name, p.le_rep,
        p.contract_name, p.contract_tel, p.storage_name, p.storage_province,
        (select name from code_addiv where code=p.storage_province) as storage_prov_name,
@@ -25,9 +27,11 @@ select p.id, p.createtime, p.apply_name, p.apply_contact_info, p.storage_ent_nam
 (select name from nf_agent where businid=(select id from nf_busin where rffsspid=p.id) and name is not null order by createtime desc limit 0, 1) as proxyname,
 (select mobile from nf_agent where businid=(select id from nf_busin where rffsspid=p.id) and mobile is not null order by createtime desc limit 0, 1) as proxycontactinfo,
 (select name from nf_checked where businid=(select id from nf_busin where rffsspid=p.id) and ctype=1 and name is not null order by createtime desc limit 0, 1) as receiver
-from nf_rffssp p where status=3
+from nf_rffssp p left join nf_busin b on p.id=b.rffsspid
+WHERE b.status = 22 and b.btype in ( 10 , 11 , 12 , 20 , 21 , 22 )
+  and p.issueorg like '23%'
 
-
+-- 查询有问题数据
 select * from (
 select p.id, p.createtime, p.apply_name, p.apply_contact_info, p.storage_ent_name, p.le_rep,
        p.contract_name, p.contract_tel, p.storage_name, p.storage_province,
@@ -45,5 +49,19 @@ select p.id, p.createtime, p.apply_name, p.apply_contact_info, p.storage_ent_nam
 from nf_rffssp p where p.status=3
     ) tt where length(tt.unisc_id)!=18 or proxyname is null or proxycontactinfo is null or receiver is null
 
-    storage_power_cubic_meter REGEXP '^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$'
+
+
+insert into infoshar_1458931363 (thirdcoldstorageinfoid, applytime, applyname, applycontactinfo, storageentname, lerep,
+                                 contractname, contracttel, storagename, storageprovince,
+                                 storageprovname,
+                                 storagecity,
+                                 storagecityname,
+                                 storagecounty,
+                                 storagecountyname,
+                                 storageaddress, storagepowerton, storagepowercubicmeter,
+                                 uniscid, recnum, rectime, entrytime, handleunitcode
+    ,handleunit
+    ,proxyname
+    ,proxycontactinfo
+    ,receiver)
 

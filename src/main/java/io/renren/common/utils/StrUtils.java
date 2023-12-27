@@ -19,4 +19,15 @@ public class StrUtils {
         String result = df.format(number);
         return result;
     }
+
+    public static double toDecimal(String input){
+        return toDecimal(input, "0.00");
+    }
+
+    public static double toDecimal(String input, String format){
+        double number = Double.parseDouble(input);
+        DecimalFormat df = new DecimalFormat(format);
+        number = Double.parseDouble(df.format(number));
+        return number;
+    }
 }

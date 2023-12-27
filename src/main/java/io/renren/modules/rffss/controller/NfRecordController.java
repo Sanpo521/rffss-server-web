@@ -2,10 +2,7 @@ package io.renren.modules.rffss.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import io.renren.common.utils.ExcelUtil;
-import io.renren.common.utils.PageUtils;
-import io.renren.common.utils.R;
-import io.renren.common.utils.StrUtils;
+import io.renren.common.utils.*;
 import io.renren.config.RffssConfig;
 import io.renren.modules.rffss.RffssConstant;
 import io.renren.modules.rffss.entity.*;
@@ -22,6 +19,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -688,6 +687,60 @@ public class NfRecordController {
         return R.ok();
     }
 
+    @RequestMapping("/uploadnb")
+    public R uploadnb(){
+        List<Map<String, Object>> records = thirdColdStorageInfoService.selectUnb();
+        if (null != records && records.size() > 0) {
+            for (Map map : records) {
+                ThirdColdStorageInfoEntity t = new ThirdColdStorageInfoEntity();
+                t.setThirdcoldstorageinfoid((String) map.get("id"));
+                if (map.get("createtime") != null) {
+                    LocalDateTime ldt = (LocalDateTime)map.get("createtime");
+                    t.setApplytime(DateUtils.stringToDate(ldt.format(DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN)), DateUtils.DATE_TIME_PATTERN));
+                }
+                t.setApplyname((String) map.get("apply_name"));
+                t.setApplycontactinfo((String) map.get("apply_contact_info"));
+                t.setStorageentname((String) map.get("storage_ent_name"));
+                t.setLerep((String) map.get("le_rep"));
+                t.setContractname((String) map.get("contract_name"));
+                t.setContracttel((String) map.get("contract_tel"));
+                t.setStoragename((String) map.get("storage_name"));
+                t.setStorageprovince((String) map.get("storage_province"));
+                t.setStorageprovname((String) map.get("storage_prov_name"));
+                t.setStoragecity((String) map.get("storage_city"));
+                t.setStoragecityname((String) map.get("storage_city_name"));
+                t.setStoragecounty((String) map.get("storage_county"));
+                t.setStoragecountyname((String) map.get("storage_county_name"));
+                t.setStorageaddress((String) map.get("storage_address"));
+                String storagePowerTon = (String) map.get("storage_power_ton");
+                if (StringUtils.isNotEmpty(storagePowerTon)) {
+                    t.setStoragepowerton(StrUtils.toDecimal(storagePowerTon));
+                }
+                String storagePowerCubicMeter = (String) map.get("storage_power_cubic_meter");
+                if (StringUtils.isNotEmpty(storagePowerCubicMeter)) {
+                    t.setStoragepowercubicmeter(StrUtils.toDecimal(storagePowerCubicMeter));
+                }
+                t.setUniscid((String) map.get("unisc_id"));
+                t.setRecnum((String) map.get("rec_num"));
+                if ( map.get("rec_time") != null) {
+                    LocalDateTime ldt = (LocalDateTime)map.get("rec_time");
+                    t.setRectime(DateUtils.stringToDate(ldt.format(DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN)), DateUtils.DATE_TIME_PATTERN));
+                }
+                if (map.get("entry_time") != null) {
+                    LocalDateTime ldt = (LocalDateTime)map.get("entry_time");
+                    t.setEntrytime(DateUtils.stringToDate(ldt.format(DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN)), DateUtils.DATE_TIME_PATTERN));
+                }
+                t.setHandleunitcode((String) map.get("issueorg"));
+                t.setHandleunit((String) map.get("handleunit"));
+                t.setProxyname((String) map.get("proxyname"));
+                t.setProxycontactinfo((String) map.get("proxycontactinfo"));
+                t.setReceiver((String) map.get("receiver"));
+                thirdColdStorageInfoService.saveData(t);
+            }
+        }
+        return R.ok();
+    }
+
     @RequestMapping("/applyc/save")
     @RequiresPermissions("nfrecord:applyc:save")
     public R applycSave(@RequestBody NfRecordEntity record){
@@ -719,11 +772,11 @@ public class NfRecordController {
                 t.setStorageaddress(rffssp.getStorageAddress());
                 String storagePowerTon = rffssp.getStoragePowerTon();
                 if(StringUtils.isNotEmpty(storagePowerTon)){
-                    t.setStoragepowerton(Integer.parseInt(storagePowerTon));
+                    t.setStoragepowerton(StrUtils.toDecimal(storagePowerTon));
                 }
                 String storagePowerCubicMeter = rffssp.getStoragePowerCubicMeter();
                 if(StringUtils.isNotEmpty(storagePowerCubicMeter)){
-                    t.setStoragepowercubicmeter(Integer.parseInt(storagePowerCubicMeter));
+                    t.setStoragepowercubicmeter(StrUtils.toDecimal(storagePowerCubicMeter));
                 }
                 t.setUniscid(rffssp.getUniscId());
                 t.setRecnum(rffssp.getRecNum());

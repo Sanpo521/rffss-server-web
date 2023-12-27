@@ -11,6 +11,7 @@ import io.renren.modules.rffss.entity.ThirdColdStorageInfoEntity;
 import io.renren.modules.rffss.service.ThirdColdStorageInfoService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -31,5 +32,8 @@ public class ThirdColdStorageInfoServiceImpl extends ServiceImpl<ThirdColdStorag
     public void saveData(ThirdColdStorageInfoEntity thirdColdStorageInfo) {
         baseMapper.insert(thirdColdStorageInfo);
     }
-
+    @Override
+    public List<Map<String,Object>> selectUnb(){
+        return baseMapper.selectUnb();
+    }
 }

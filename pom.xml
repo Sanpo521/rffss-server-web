@@ -327,7 +327,7 @@
 						<resource>
 							<targetPath>/</targetPath>
 							<directory>${project.build.directory}</directory>
-							<include>${project.build.finalName}.jar</include>
+							<include>rffss-0.0.1-SNAPSHOT.jar</include>
 						</resource>
 					</resources>
 				</configuration>
