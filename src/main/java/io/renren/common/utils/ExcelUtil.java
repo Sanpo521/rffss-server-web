@@ -1,10 +1,7 @@
 package io.renren.common.utils;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,21 +28,31 @@ public class ExcelUtil {
         Workbook wb =null;
                 //设置响应头
         setResponseHeader(response,fileName);
-
         try {
             //获取输出流
             os = response.getOutputStream();
             //内存中保留1000条数据，以免内存溢出，其余写入硬盘
-            wb = new HSSFWorkbook();
+            wb = new XSSFWorkbook();
             //获取该工作区的第一个sheet
-            Sheet sheet1 = wb.createSheet("sheet1");
+            XSSFSheet sheet1 = (XSSFSheet)wb.createSheet("sheet1");
             int excelRow = 0;
             //创建标题行
             Row titleRow = sheet1.createRow(excelRow++);
+            // 创建单元格样式对象
+            XSSFCellStyle style = (XSSFCellStyle) wb.createCellStyle();
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            // 设置边框样式为细线条
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
             for(int i = 0;i<columnList.size();i++){
                 //创建该行下的每一列，并写入标题数据
                 Cell cell = titleRow.createCell(i);
                 cell.setCellValue(columnList.get(i));
+                // 将样式应用到单元格上
+                cell.setCellStyle(style);
             }
             //设置内容行
             if(dataList!=null && !dataList.isEmpty()){
@@ -64,9 +71,15 @@ public class ExcelUtil {
                                 cell.setCellValue(dataList.get(i).get(j));
                             }
                         }
+                        cell.setCellStyle(style);
                     }
                 }
             }
+            for(int i = 0;i<columnList.size();i++){
+                sheet1.autoSizeColumn(i);
+            }
+            // 处理中文不能自动调整列宽的问题
+            setSizeColumn(sheet1, columnList.size());
             //将整理好的excel数据写入流中
             wb.write(os);
         } catch (IOException e) {
@@ -87,6 +100,33 @@ public class ExcelUtil {
                     logger.error(e.getMessage());
                 }
             }
+        }
+    }
+
+    // 自适应宽度(中文支持)
+    private static void setSizeColumn(XSSFSheet sheet, int size) {
+        for (int columnNum = 0; columnNum < size; columnNum++) {
+            int columnWidth = sheet.getColumnWidth(columnNum) / 256;
+            for (int rowNum = 0; rowNum < sheet.getLastRowNum(); rowNum++) {
+                XSSFRow currentRow;
+                //当前行未被使用过
+                if (sheet.getRow(rowNum) == null) {
+                    currentRow = sheet.createRow(rowNum);
+                } else {
+                    currentRow = sheet.getRow(rowNum);
+                }
+
+                if (currentRow.getCell(columnNum) != null) {
+                    XSSFCell currentCell = currentRow.getCell(columnNum);
+                    if (currentCell.getCellType() == XSSFCell.CELL_TYPE_STRING) {
+                        int length = currentCell.getStringCellValue().getBytes().length;
+                        if (columnWidth < length) {
+                            columnWidth = length;
+                        }
+                    }
+                }
+            }
+            sheet.setColumnWidth(columnNum, columnWidth * 256);
         }
     }
 

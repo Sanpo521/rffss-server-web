@@ -40,8 +40,9 @@ public class CodeAddivController {
      */
     @RequestMapping("/tree")
     public R tree(@RequestParam Map<String, Object> params){
-        String parentCode = "230000";
-        JSONArray tree = codeAddivService.queryTreeEx(parentCode);
+        String orgcode = "230000";
+//        String orgcode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+        JSONArray tree = codeAddivService.queryTreeEx(orgcode);
 
         return R.ok().put("page", tree);
     }

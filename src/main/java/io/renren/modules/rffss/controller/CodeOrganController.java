@@ -5,6 +5,9 @@ import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
 import io.renren.modules.rffss.entity.CodeOrganEntity;
 import io.renren.modules.rffss.service.CodeOrganService;
+import io.renren.modules.sys.entity.SysUserEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import java.util.Map;
  * @email sanpo521@gmail.com
  * @date 2021-11-08 14:31:41
  */
+@Slf4j
 @RestController
 @RequestMapping("codeorgan")
 public class CodeOrganController {
@@ -43,8 +47,16 @@ public class CodeOrganController {
      */
     @RequestMapping("/tree")
     public R tree(@RequestParam Map<String, Object> params){
-        String parentCode = "230000";
-        JSONArray tree = codeOrganService.queryTreeEx(parentCode);
+        String code = "230000";
+        try{
+            String orgCode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+            if (null != orgCode){
+                code = orgCode;
+            }
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        JSONArray tree = codeOrganService.queryTreeEx(code);
 
         return R.ok().put("page", tree);
     }

@@ -32,8 +32,12 @@ public class CodeAddivServiceImpl extends ServiceImpl<CodeAddivDao, CodeAddivEnt
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         QueryWrapper<CodeAddivEntity> queryWrapper = new QueryWrapper<CodeAddivEntity>().eq("enabled", 1);
-        String orgcode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
-        queryWrapper.and(wq->wq.eq("code", orgcode).or().eq("parent", orgcode));
+        String orgcode = "230000";
+        if (SecurityUtils.getSubject().getPrincipal()!=null){
+            orgcode =  ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+        }
+        String finalOrgcode = orgcode;
+        queryWrapper.and(wq->wq.eq("code", finalOrgcode).or().eq("parent", finalOrgcode));
         List<CodeAddivEntity> codeAddivEntityList = this.baseMapper.selectList(queryWrapper);
         return new PageUtils(codeAddivEntityList, codeAddivEntityList.size(), 1, 1);
     }

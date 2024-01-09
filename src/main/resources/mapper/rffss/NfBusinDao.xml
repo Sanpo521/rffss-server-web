@@ -257,9 +257,9 @@
     </select>
 
     <select id="excel" resultType="Map">
-        select r.apply_time, r.unisc_id, r.storage_ent_name, r.le_rep, r.contract_name, r.contract_tel, r.storage_name,
-               sheng.name as storageprovname, shi.name as storagecityname ,xian. name  as storagecountyname,
-               r.storage_address, r.storage_power_ton, r.storage_power_cubic_meter, r.rec_num, r.rec_time
+        select DATE_FORMAT(r.apply_time, '%Y-%m-%d') as apply_time, r.unisc_id, r.storage_ent_name, r.le_rep, r.contract_name, r.contract_tel, r.storage_name,
+        sheng.name as storageprovname, shi.name as storagecityname ,xian. name  as storagecountyname,
+        r.storage_address, r.storage_power_ton, r.storage_power_cubic_meter, r.rec_num, DATE_FORMAT(r.rec_time, '%Y-%m-%d') as rec_time
         from  nf_rffssp  r
         LEFT JOIN code_addiv as sheng on r.storage_province=sheng.code
         LEFT JOIN code_addiv as shi on r.storage_city=shi.code

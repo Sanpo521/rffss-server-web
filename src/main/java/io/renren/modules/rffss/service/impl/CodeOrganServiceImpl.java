@@ -29,8 +29,13 @@ public class CodeOrganServiceImpl extends ServiceImpl<CodeOrganDao, CodeOrganEnt
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         QueryWrapper<CodeOrganEntity> queryWrapper = new QueryWrapper<CodeOrganEntity>().eq("enabled", 1);
-        String orgcode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
-        queryWrapper.and(wq->wq.eq("code", orgcode).or().eq("parentcode", orgcode));
+//        String orgcode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+//        queryWrapper.and(wq->wq.eq("code", orgcode).or().eq("parentcode", orgcode));
+        String orgcode = "230000";
+        if (SecurityUtils.getSubject().getPrincipal()!=null){
+            orgcode =  ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
+        }
+        String finalOrgcode = orgcode;
         List<CodeOrganEntity> codeOrganEntityList = this.baseMapper.selectList(queryWrapper);
         return new PageUtils(codeOrganEntityList, codeOrganEntityList.size(), 1, 1);
     }
@@ -68,14 +73,6 @@ public class CodeOrganServiceImpl extends ServiceImpl<CodeOrganDao, CodeOrganEnt
 
     @Override
     public JSONArray queryTreeEx(String code){
-        try{
-            String orgCode = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getOrgcode();
-            if (null != orgCode){
-                code = orgCode;
-            }
-        }catch (Exception e){
-            log.error(e.getMessage(), e);
-        }
         JSONArray ja =  new JSONArray();
         CodeOrganEntity codeOrganCur = getByCode(code);
         JSONArray jaa = queryTree(code);

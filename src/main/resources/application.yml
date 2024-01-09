@@ -49,9 +49,9 @@ spring:
 #      url: jdbc:mysql://39.107.96.6:3306/nf_samr_rffss?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
 #      username: root
 #      password: 123456qwe
-      url: jdbc:mysql://mysql.sqlpub.com:3306/zzbzzb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-      username: zzbzzb
-      password: a4d0f4a3731faaba
+      url: jdbc:mysql://rm-uf6n84j0j2e1fb7ueuo.mysql.rds.aliyuncs.com:3306/rffss?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: goVfuk-jazjis-kopma9
       initial-size: 10
       max-active: 100
       min-idle: 10

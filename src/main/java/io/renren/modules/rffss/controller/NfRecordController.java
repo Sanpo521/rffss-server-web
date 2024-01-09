@@ -275,7 +275,7 @@ public class NfRecordController {
                 str.add(item.get("rec_time") != null ? item.get("rec_time").toString() : "");
                 return str;
             }).collect(Collectors.toList());
-            ExcelUtil.uploadExcelAboutUser(response, id+".xls", columnList, collect);
+            ExcelUtil.uploadExcelAboutUser(response, "hlj"+id+".xls", columnList, collect);
         }
     }
 
